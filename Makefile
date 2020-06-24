@@ -12,14 +12,16 @@ all: build push yadage-clean yadage-run
 
 .PHONY: build
 build:
-	@docker build . --tag $(REGISTRY)/$(NAME):$(VERSION) --tag $(REGISTRY)/$(NAME):latest
+	@docker build . \
+		--tag $(DOCKER_REGISTRY)/$(DOCKER_NAME):$(DOCKER_VERSION) \
+		--tag $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 
 .PHONY: push
 push: build
 	@docker login --username "${DOCKERUSER}" --password "${DOCKERPASS}"
-	@docker push $(REGISTRY)/$(NAME):$(VERSION)
-	@docker push $(REGISTRY)/$(NAME):latest
+	@docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):$(DOCKER_VERSION)
+	@docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 
 .PHONY: yadage-clean
