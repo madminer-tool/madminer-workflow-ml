@@ -1,0 +1,53 @@
+########################################
+######### CONTAINER ENVIRONMENT ########
+########################################
+
+common_env_ml: &common_env_ml
+    environment_type: 'docker-encapsulated'
+    image: 'madminertool/madminer-workflow-ml'
+    imagetag: '0.1.0'
+
+
+#######################################
+############ WORKFLOW STEPS ###########
+#######################################
+
+sampling:
+  environment: *common_env_ml
+  process:
+    process_type: string-interpolated-cmd
+    cmd: scripts/1_sampling.sh -p /madminer -n {train_samples} -i {input_file} -d {data_file} -o {output_dir}
+  publisher:
+    publisher_type: 'fromglob-pub'
+    outputkey: sampling_file
+    globexpression: 'ml/data/Samples_*'
+
+training:
+  environment: *common_env_ml
+  process:
+    process_type: string-interpolated-cmd
+    cmd: scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
+  publisher:
+    publisher_type: 'fromglob-pub'
+    outputkey: trained_file
+    globexpression: 'ml/Model.tar.gz'
+
+evaluating:
+  environment: *common_env_ml
+  process:
+    process_type: string-interpolated-cmd
+    cmd: scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir}
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      results_file: 'ml/Results_*.tar.gz'
+
+plotting:
+  environment: *common_env_ml
+  process:
+    process_type: string-interpolated-cmd
+    cmd: scripts/4_plotting.sh -p /madminer -i {input_file} -r {result_files} -o {output_dir}
+  publisher:
+    publisher_type: interpolated-pub
+    publish:
+      outputfile: '{output_file}'
