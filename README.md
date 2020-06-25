@@ -27,7 +27,7 @@ Considering the workflow steps:
                          |   Sampling   |
                          +--------------+
                                 |
-            +-------------------|-------------------+
+            +-------------------+-------------------+
             |                   |                   |
             v                   v                   v
     +--------------+    +--------------+    +--------------+
@@ -40,7 +40,7 @@ Considering the workflow steps:
     | Evaluation_0 |    | Evaluation_1 |    |      ...     |
     +--------------+    +--------------+    +--------------+
             |                   |                   |
-            +-------------------|-------------------+
+            +-------------------+-------------------+
                                 v
                         +--------------+
                         |     Plot     |
@@ -50,13 +50,12 @@ Considering the workflow steps:
 ## Execution
 When executing the workflow (either fully or some of its parts) it is important to consider that
 each individual step received inputs and generates outputs. Outputs are usually files, which need
-to be temporarily stored for the execution of later steps.
+to be temporarily stored to serve as input for later steps.
 
 The _shell script layer_ provides an easy way to redirect outputs to what is called a `WORKDIR`.
 The `WORKDIR` is just a folder where steps output files are stored to be use for other ones.
-
-In addition, the _shell script layer_ provides a way of specifying the path where the project code
-and scripts are stored. This becomes useful to allow both _local_ and _within-docker_ executions.
+In addition, this layer provides a way of specifying the path where the project code and scripts 
+are stored. This becomes useful to allow both _local_ and _within-docker_ executions.
 
 When executing the workflow there are 2 alternatives:
 
