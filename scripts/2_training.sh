@@ -12,7 +12,7 @@ helpFunction()
     printf "Usage: %s -p project_path -i input_file -t train_folder -o output_dir\n" "${0}"
     printf "\t-p Project top-level path\n"
     printf "\t-i Workflow input file\n"
-    printf "\t-t Train folder name\n"
+    printf "\t-t Train folder path\n"
     printf "\t-o Workflow output dir\n"
     exit 1
 }
@@ -39,7 +39,6 @@ fi
 # Define auxiliary variables
 MODEL_FILE_ABS_PATH="${OUTPUT_DIR}/Model.tar.gz"
 MODEL_INFO_ABS_PATH="${OUTPUT_DIR}/models"
-SAMPLES_ABS_PATH="${OUTPUT_DIR}/data/${TRAIN_FOLDER}"
 
 
 # Cleanup previous files (useful when run locally)
@@ -50,5 +49,5 @@ mkdir -p "${MODEL_INFO_ABS_PATH}"
 
 
 # Perform actions
-python3 "${PROJECT_PATH}/code/train.py" "${SAMPLES_ABS_PATH}" "${INPUT_FILE}" "${OUTPUT_DIR}"
+python3 "${PROJECT_PATH}/code/train.py" "${TRAIN_FOLDER}" "${INPUT_FILE}" "${OUTPUT_DIR}"
 tar -czvf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .

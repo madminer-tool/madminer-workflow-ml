@@ -29,7 +29,7 @@ training:
     cmd: scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
-    outputkey: trained_file
+    outputkey: output_file
     globexpression: 'ml/Model.tar.gz'
 
 evaluating:
@@ -38,9 +38,9 @@ evaluating:
     process_type: string-interpolated-cmd
     cmd: scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir}
   publisher:
-    publisher_type: interpolated-pub
-    publish:
-      results_file: 'ml/Results_*.tar.gz'
+    publisher_type: 'fromglob-pub'
+    outputkey: output_files
+    globexpression: 'ml/Results_*.tar.gz'
 
 plotting:
   environment: *common_env_ml
@@ -50,4 +50,4 @@ plotting:
   publisher:
     publisher_type: interpolated-pub
     publish:
-      outputfile: '{output_file}'
+      outputfile: '{output_name}'
