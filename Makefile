@@ -41,11 +41,10 @@ yadage-clean:
 
 
 .PHONY: yadage-run
-yadage-run: yadage-adapt
+yadage-run: yadage-clean
 	@echo "Launching Yadage..."
 	@yadage-run $(YADAGE_WORKDIR) "workflow.yml" \
 		-p input_file="input.yml" \
 		-p train_samples="1" \
 		-d initdir=$(YADAGE_INPUT_DIR) \
-		--toplevel $(YADAGE_SPEC_DIR) \
-		--accept-metadir
+		--toplevel $(YADAGE_SPEC_DIR)

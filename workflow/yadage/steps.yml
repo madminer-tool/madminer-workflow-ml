@@ -20,7 +20,7 @@ sampling:
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: sampling_file
-    globexpression: 'ml/data/Samples_*'
+    globexpression: 'data/Samples_*'
 
 training:
   environment: *common_env_ml
@@ -30,7 +30,7 @@ training:
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
-    globexpression: 'ml/Model.tar.gz'
+    globexpression: 'Model.tar.gz'
 
 evaluating:
   environment: *common_env_ml
@@ -40,13 +40,13 @@ evaluating:
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_files
-    globexpression: 'ml/Results_*.tar.gz'
+    globexpression: 'Results_*.tar.gz'
 
 plotting:
   environment: *common_env_ml
   process:
     process_type: string-interpolated-cmd
-    cmd: scripts/4_plotting.sh -p /madminer -i {input_file} -r {result_files} -o {output_dir}
+    cmd: scripts/4_plotting.sh -p /madminer -i {input_file} -r '{result_files}' -o {output_dir}
   publisher:
     publisher_type: interpolated-pub
     publish:

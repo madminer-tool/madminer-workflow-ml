@@ -9,7 +9,7 @@ set -o nounset
 helpFunction()
 {
     printf "\n"
-    printf "Usage: %s -p project_path -i input_file -r result_files -o output_dir\n" "${0}"
+    printf "Usage: %s -p project_path -i input_file -r 'result_file_1 result_file_2 ...' -o output_dir\n" "${0}"
     printf "\t-p Project top-level path\n"
     printf "\t-i Workflow input file\n"
     printf "\t-r Result files paths\n"
@@ -39,9 +39,7 @@ fi
 # Perform actions
 mkdir -p "${OUTPUT_DIR}/plots"
 
-# POSIX shell scripts do not allow arrays (workaround)
-echo "${RESULT_FILES}" | tr ' ' '\n' | while read -r file; do
-    echo "${file}"
+for file in ${RESULT_FILES}; do
     tar -xvf "${file}" -C "${OUTPUT_DIR}";
 done
 

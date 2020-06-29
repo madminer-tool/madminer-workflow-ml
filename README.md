@@ -85,6 +85,7 @@ image for this workflow jump to the [Docker section](#docker).
 Once the Docker image is published:
 ```shell script
 pip3 install yadage
+make yadage-adapt
 make yadage-run
 ```
 
