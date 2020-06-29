@@ -68,7 +68,7 @@ validation_split: 0.3
 
 luminosity: 10000.0
 
-# Region of theory we want to proof
+# Region of theory we want to test
 asymptotic_limits:
   bool: True
   region:

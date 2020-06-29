@@ -8,6 +8,7 @@ WORKDIR /madminer
 
 #### Copy files
 COPY code ./code
+COPY data ./data
 COPY scripts ./scripts
 COPY requirements.txt .
 

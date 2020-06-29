@@ -26,8 +26,11 @@ push: build
 	@docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 
-# This rule is necessary to allow the execution of the ML workflow
-# As a sub-workflow in the "Scailfin/madminer-workflow" wrapper repo.
+## ------------------------- CLARIFICATION -------------------------
+## This rule is necessary to allow the execution of the ML workflow
+## As a sub-workflow in the "Scailfin/madminer-workflow" wrapper repo.
+## -----------------------------------------------------------------
+
 .PHONY: yadage-adapt
 yadage-adapt:
 	@echo "Adapting Workflow to isolated run..."
@@ -44,6 +47,7 @@ yadage-clean:
 yadage-run: yadage-clean
 	@echo "Launching Yadage..."
 	@yadage-run $(YADAGE_WORKDIR) "workflow.yml" \
+		-p data_file="data/dummy_data.h5" \
 		-p input_file="input.yml" \
 		-p train_samples="1" \
 		-d initdir=$(YADAGE_INPUT_DIR) \

@@ -9,7 +9,7 @@ set -o nounset
 helpFunction()
 {
     printf "\n"
-    printf "Usage: %s -p project_path -n num_train_samples -i input_file -d data_file\n" "${0}"
+    printf "Usage: %s -p project_path -n num_train_samples -i input_file -d data_file -o output_dir\n" "${0}"
     printf "\t-p Project top-level path\n"
     printf "\t-n Number of training samples\n"
     printf "\t-i Workflow input file\n"
@@ -39,5 +39,9 @@ then
 fi
 
 
+# Define auxiliary variables
+DATA_ABS_PATH="${PROJECT_PATH}/${DATA_FILE}"
+
+
 # Perform actions
-python3 "${PROJECT_PATH}/code/sampling.py" "${NUM_SAMPLES}" "${DATA_FILE}" "${INPUT_FILE}" "${OUTPUT_DIR}"
+python3 "${PROJECT_PATH}/code/sampling.py" "${NUM_SAMPLES}" "${DATA_ABS_PATH}" "${INPUT_FILE}" "${OUTPUT_DIR}"
