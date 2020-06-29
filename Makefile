@@ -2,12 +2,14 @@ DOCKER_NAME=madminer-workflow-ml
 DOCKER_REGISTRY=madminertool
 DOCKER_VERSION=$(shell cat ./VERSION)
 
+YADAGE_INITIAL_STEP="init"
+
 YADAGE_INPUT_DIR="$(PWD)/workflow"
 YADAGE_SPEC_DIR="$(PWD)/workflow/yadage"
 YADAGE_WORKDIR="$(PWD)/.yadage"
 
 
-all: build push yadage-clean yadage-run
+all: build push yadage-adapt yadage-clean yadage-run
 
 
 .PHONY: build
@@ -24,6 +26,14 @@ push: build
 	@docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):latest
 
 
+# This rule is necessary to allow the execution of the ML workflow
+# As a sub-workflow in the "Scailfin/madminer-workflow" wrapper repo.
+.PHONY: yadage-adapt
+yadage-adapt:
+	@echo "Adapting Workflow to isolated run..."
+	@sed -i "" "s/{data_step}/$(YADAGE_INITIAL_STEP)/g" "$(YADAGE_SPEC_DIR)/workflow.yml"
+
+
 .PHONY: yadage-clean
 yadage-clean:
 	@echo "Cleaning previous run..."
@@ -31,11 +41,11 @@ yadage-clean:
 
 
 .PHONY: yadage-run
-yadage-run: yadage-clean
+yadage-run: yadage-adapt
 	@echo "Launching Yadage..."
 	@yadage-run $(YADAGE_WORKDIR) "workflow.yml" \
 		-p input_file="input.yml" \
 		-p train_samples="1" \
 		-d initdir=$(YADAGE_INPUT_DIR) \
 		--toplevel $(YADAGE_SPEC_DIR) \
-		--visualize
+		--accept-metadir

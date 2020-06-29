@@ -5,7 +5,7 @@ stages:
     scheduler:
       scheduler_type: singlestep-stage
       parameters:
-        data_file: {step: init, output: data_file}
+        data_file: {step: {data_step}, output: data_file}
         input_file: {step: init, output: input_file}
         train_samples: {step: init, output: train_samples}
         output_dir: '{workdir}/ml'
@@ -29,7 +29,7 @@ stages:
     scheduler:
       scheduler_type: multistep-stage
       parameters:
-        data_file: {step: init, output: data_file}
+        data_file: {step: {data_step}, output: data_file}
         input_file: {step: init, output: input_file}
         model_file: {stages: training, output: output_file, unwrap: true}
         output_dir: '{workdir}/ml'
