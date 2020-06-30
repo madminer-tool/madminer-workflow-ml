@@ -2,11 +2,10 @@
 
 
 ### About
-This folder contains the a sample H5 dataset (`dummy_data.h5`) which serves as 
-initial data file to run the workflow locally using Yadage.
+This folder contains a sample H5 dataset (`dummy_data.h5`) which serves as initial data file
+to run the workflow locally using Yadage.
 
 ```shell script
-make yadage-adapt
 make yadage-run
 ```
 

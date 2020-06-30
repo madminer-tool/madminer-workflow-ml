@@ -39,9 +39,5 @@ then
 fi
 
 
-# Define auxiliary variables
-DATA_ABS_PATH="${PROJECT_PATH}/${DATA_FILE}"
-
-
 # Perform actions
-python3 "${PROJECT_PATH}/code/sampling.py" "${NUM_SAMPLES}" "${DATA_ABS_PATH}" "${INPUT_FILE}" "${OUTPUT_DIR}"
+python3 "${PROJECT_PATH}/code/sampling.py" "${NUM_SAMPLES}" "${DATA_FILE}" "${INPUT_FILE}" "${OUTPUT_DIR}"
