@@ -1,0 +1,29 @@
+# ML Project:
+#
+# The following file specifies the project as a reproducible
+# MLFlow project, which allow us to parametrize the inputs on
+# consecutive runs and to track results using a tracking server.
+#
+# It has been created following this guide:
+# https://www.mlflow.org/docs/latest/projects.html
+
+name: madminer-workflow-ml
+
+entry_points:
+
+  train:
+    command: "python3 {project_path}/code/train.py {train_folder} {input_file} {output_dir}"
+    parameters:
+      project_path: path
+      input_file: path
+      train_folder: path
+      output_dir: path
+
+  eval:
+    command: "python3 {project_path}/code/evaluation.py {input_file} {model_dir} {data_file} {output_dir}"
+    parameters:
+      project_path: path
+      input_file: path
+      model_dir: path
+      data_file: path
+      output_dir: path
