@@ -17,6 +17,7 @@ stages:
       scheduler_type: multistep-stage
       parameters:
         input_file: {step: init, output: input_file}
+        mlflow_server: {step: init, output: mlflow_server}
         train_folder: {step: sampling, output: sampling_file}
         output_dir: '{workdir}'
       scatter:
@@ -31,6 +32,7 @@ stages:
       parameters:
         data_file: {step: init, output: data_file}
         input_file: {step: init, output: input_file}
+        mlflow_server: {step: init, output: mlflow_server}
         model_file: {stages: training, output: output_file, unwrap: true}
         output_dir: '{workdir}'
       scatter:
