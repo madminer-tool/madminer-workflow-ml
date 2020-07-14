@@ -14,11 +14,12 @@ For debugging purposes, a dummy generated file is placed in the [data folder][da
 
 
 ## Workflow definition
-The workflow specification is composed of 3 hierarchical layers. From top to bottom:
+The workflow specification is composed of 4 hierarchical layers. From top to bottom:
 
 1. **Workflow spec:** description of how steps are coordinated.
 2. **Shell scripts:** entry points for each of the steps.
-3. **Python scripts:** set of actions to interact with Madminer.
+3. **MLproject rules:** entry point for parametrized steps.
+4. **Python scripts:** set of actions to interact with Madminer.
 
 The division into multiple layers is very useful for debugging. It provides developers an easy way 
 to test individual steps before testing the full workflow coordination.
@@ -49,6 +50,13 @@ Considering the workflow steps:
                         +--------------+
 
 
+## MLFlow
+For hyper-parameter tuning and models tracking, MLFlow has been introduced on certain parts
+of the workflow.
+
+Follow the [MLFlow guide][mlflow-guide] to review the implications.
+
+
 ## Execution
 When executing the workflow (either fully or some of its parts) it is important to consider that
 each individual step received inputs and generates outputs. Outputs are usually files, which need
@@ -75,7 +83,7 @@ scripts/1_sampling.sh \
     -o .workdir
 ```
 
-### B) Workflow
+### B) Coordinated
 The full workflow can be launched using [Yadage][yadage-repo]. Yadage is a YAML specification language
 over a set of utilities that are used to coordinate workflows. Please consider that it can be hard
 to define Yadage workflows as the [Yadage documentation][yadage-docs] is incomplete.
@@ -110,6 +118,7 @@ make push
 [madminer-docs]: https://madminer.readthedocs.io/en/latest/index.html
 [madminer-repo]: https://github.com/diana-hep/madminer
 [madminer-workflow-ph]: https://github.com/scailfin/madminer-workflow-ph
+[mlflow-guide]: MLFLOW.md
 [yadage-repo]: https://github.com/yadage/yadage
 [yadage-docs]: https://yadage.readthedocs.io/en/latest/
 [lukas-profile]: https://github.com/lukasheinrich
