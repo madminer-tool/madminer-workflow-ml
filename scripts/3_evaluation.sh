@@ -63,9 +63,20 @@ MODEL_NAME=$(find "${MODELS_ABS_PATH}" -type d -mindepth 1 -maxdepth 1 -exec bas
 MODEL_DIR="${MODELS_ABS_PATH}/${MODEL_NAME}"
 
 
-python3 "${PROJECT_PATH}/code/evaluation.py" "${INPUT_FILE}" "${MODEL_DIR}" "${DATA_FILE}" "${OUTPUT_DIR}"
+# Perform actions
+mlflow run \
+    --experiment-name "madminer-ml-eval" \
+    --entry-point "eval" \
+    --backend "local" \
+    --no-conda \
+    --param-list "project_path=${PROJECT_PATH}" \
+    --param-list "input_file=${INPUT_FILE}" \
+    --param-list "model_dir=${MODEL_DIR}" \
+    --param-list "data_file=${DATA_FILE}" \
+    --param-list "output_dir=${OUTPUT_DIR}" \
+    "${PROJECT_PATH}"
 
-tar -czvf "${OUTPUT_DIR}/Results_${MODEL_NAME}.tar.gz" \
+tar -czf "${OUTPUT_DIR}/Results_${MODEL_NAME}.tar.gz" \
     -C "${OUTPUT_DIR}" \
     "models" \
     "rates" \
