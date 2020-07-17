@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import h5py
 import logging
 import numpy as np
 import os
@@ -77,10 +76,6 @@ luminosity = float(inputs['luminosity'])
 test_split = float(inputs['test_split'])
 num_samples = int(inputs['n_samples']['test'])
 
-# Do NOT use a context manager here, the file would be closed
-f = h5py.File(data_file, 'r')
-parameters = f['parameters']['names']
-
 
 ###############################
 ## Define calc. events func. ##
@@ -125,23 +120,21 @@ def calc_num_events(config_file, lum):
 # Define args override func. #
 ##############################
 
-def generate_theta_args(theta_spec, params):
+def generate_theta_args(theta_spec: dict):
     """
     Generates the theta arguments that the method will take later on
     :param theta_spec: theta specification on the inputs file
-    :param params: list of parameter names the analysis is taking
     :return: list
     """
 
     prior = []
 
-    for p, _ in enumerate(params):
-        param_prior = theta_spec['prior'][f'parameter_{p}']
+    for p in theta_spec['prior']:
         prior.append(
             (
-                param_prior['prior_shape'],
-                float(param_prior['prior_param_0']),
-                float(param_prior['prior_param_1']),
+                p['prior_shape'],
+                p['prior_param_0'],
+                p['prior_param_1'],
             )
         )
 
@@ -152,11 +145,10 @@ def generate_theta_args(theta_spec, params):
 # Define data gen. functions #
 ##############################
 
-def generate_test_data_ratio(method, params):
+def generate_test_data_ratio(method):
     """
     Generates test data files given a particular method (ratio)
     :param method: name of the MadMiner method to generate theta
-    :param params: list of parameter names the analysis is taking
     """
 
     sampler = SampleAugmenter(data_file, include_nuisance_parameters=False)
@@ -171,7 +163,7 @@ def generate_test_data_ratio(method, params):
 
         # Overriding default 'theta' arguments
         if theta_sampling == 'random_morphing_points':
-            theta_args = generate_theta_args(theta, params)
+            theta_args = generate_theta_args(theta)
 
         # Getting the specified sampling method
         theta_method = sampling_methods.get(theta_sampling)
@@ -195,13 +187,13 @@ def generate_test_data_ratio(method, params):
 
         # Overriding default 'theta' arguments
         if theta_0_sampling == 'random_morphing_points':
-            theta_0_args = generate_theta_args(theta_0, parameters)
+            theta_0_args = generate_theta_args(theta_0)
             theta_1_args = [theta_1['argument']]
 
         # Overriding default 'theta' arguments
         if theta_1_sampling == 'random_morphing_points':
             theta_0_args = [theta_0['argument']]
-            theta_1_args = generate_theta_args(theta_1, parameters)
+            theta_1_args = generate_theta_args(theta_1)
 
         # Getting the specified sampling method
         theta_0_method = sampling_methods.get(theta_0_sampling)
@@ -216,11 +208,10 @@ def generate_test_data_ratio(method, params):
         )
 
 
-def generate_test_data_score(method, params):
+def generate_test_data_score(method):
     """
     Generates test data files given a particular method (score)
     :param method: name of the MadMiner method to generate theta
-    :param params: list of parameter names the analysis is taking
     """
 
     sampler = SampleAugmenter(data_file, include_nuisance_parameters=False)
@@ -234,7 +225,7 @@ def generate_test_data_score(method, params):
 
     # Overriding default 'theta' arguments
     if theta_sampling == 'random_morphing_points':
-        theta_args = generate_theta_args(theta, params)
+        theta_args = generate_theta_args(theta)
 
     # Getting the specified sampling method (defaults to 'benchmark')
     theta_method = sampling_methods.get(theta_sampling, benchmark)
@@ -399,7 +390,7 @@ if fisher_info['bool'] and gen_method == 'sally':
 ###############################
 
 # Generate test data and num_events
-generate_test_data_ratio(gen_method, parameters)
+generate_test_data_ratio(gen_method)
 num_events = calc_num_events(data_file, luminosity)
 
 theta_grid = np.load(rates_dir + '/grid.npy')
