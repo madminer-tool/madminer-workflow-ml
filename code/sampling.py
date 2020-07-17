@@ -1,44 +1,19 @@
 #!/usr/bin/python
 
-import logging
 import sys
 import yaml
 
 from pathlib import Path
 from madminer.sampling import SampleAugmenter
-
-# These methods are applied if specified in the input files
-from madminer.sampling import benchmark
-from madminer.sampling import benchmarks
-from madminer.sampling import morphing_point
-from madminer.sampling import random_morphing_points
+from shared.steps_logging import logger, setup_logger
+from shared.theta_parameters import get_theta_values
 
 
 ##########################
 ##### Set up logging #####
 ##########################
 
-logging.basicConfig(
-    format='%(asctime)-5.5s %(name)-20.20s %(levelname)-7.7s %(message)s',
-    datefmt='%H:%M',
-    level=logging.INFO
-)
-
-for key in logging.Logger.manager.loggerDict:
-    if "madminer" not in key:
-        logging.getLogger(key).setLevel(logging.WARNING)
-
-
-############################
-##### Global variables #####
-############################
-
-sampling_methods = {
-    'benchmark': benchmark,
-    'benchmarks': benchmarks,
-    'morphing_points': morphing_point,
-    'random_morphing_points': random_morphing_points,
-}
+setup_logger("INFO")
 
 
 ############################
@@ -62,8 +37,8 @@ with open(inputs_file) as f:
 
 nuisance = inputs['include_nuisance_parameters']
 methods = inputs['methods']
-samples = int(inputs['n_samples']['train'])
-split = float(inputs['test_split'])
+n_samples = inputs['n_samples']['train']
+test_split = inputs['test_split']
 
 
 #############################
@@ -71,31 +46,6 @@ split = float(inputs['test_split'])
 #############################
 
 sampler = SampleAugmenter(data_file, include_nuisance_parameters=nuisance)
-
-
-##############################
-# Define args override func. #
-##############################
-
-def generate_theta_args(theta_spec: dict):
-    """
-    Generates the theta arguments that the method will take later on
-    :param theta_spec: theta specification on the inputs file
-    :return: list
-    """
-
-    prior = []
-
-    for p in theta_spec['prior']:
-        prior.append(
-            (
-                p['prior_shape'],
-                p['prior_param_0'],
-                p['prior_param_1'],
-            )
-        )
-
-    return [theta_spec['n_thetas'], prior]
 
 
 #############################
@@ -109,92 +59,49 @@ train_global_methods = {'scandal'}
 
 # Iterate through the methods
 for method in methods:
-
+    logger.info(f'Sampling from method: {method}')
     training_params = inputs[method]
-    print(f'Sampling from method: {method}')
-
 
     for i in range(num_train_samples):
 
         if method in train_ratio_methods:
-            theta_0 = training_params['theta_0']
-            theta_1 = training_params['theta_1']
-            theta_0_sampling = theta_0['sampling_method']
-            theta_1_sampling = theta_1['sampling_method']
-
-            # Default arguments in case no theta is 'random_morphing_points'
-            theta_0_args = ['w']
-            theta_1_args = ['sm']
-
-            # Overriding default 'theta' arguments
-            if theta_0_sampling == 'random_morphing_points':
-                theta_0_args = generate_theta_args(theta_0)
-                theta_1_args = [theta_1['argument']]
-
-            # Overriding default 'theta' arguments
-            if theta_1_sampling == 'random_morphing_points':
-                theta_0_args = [theta_0['argument']]
-                theta_1_args = generate_theta_args(theta_1)
-
-            # Getting the specified sampling method (defaults to 'benchmark')
-            theta_0_method = sampling_methods.get(theta_0_sampling, benchmark)
-            theta_1_method = sampling_methods.get(theta_1_sampling, benchmark)
+            theta_0_spec = training_params['theta_0']
+            theta_1_spec = training_params['theta_1']
+            theta_0_vals = get_theta_values(theta_0_spec)
+            theta_1_vals = get_theta_values(theta_1_spec)
 
             sampler.sample_train_ratio(
-                theta0=theta_0_method(*theta_0_args),
-                theta1=theta_1_method(*theta_1_args),
-                n_samples=samples,
+                theta0=theta_0_vals,
+                theta1=theta_1_vals,
+                n_samples=n_samples,
                 folder=data_dir + f'/Samples_{method}_{i}',
                 filename=method + '_train',
-                test_split=split,
+                test_split=test_split,
             )
-
 
         elif method in train_local_methods:
-            theta = training_params['theta']
-            theta_sampling = theta['sampling_method']
-
-            # Default arguments in case theta is 'random_morphing_points'
-            theta_args = [theta['argument']]
-
-            # Overriding default 'theta' arguments
-            if theta_sampling == 'random_morphing_points':
-                theta_args = generate_theta_args(theta)
-
-            # Getting the specified sampling method (defaults to 'benchmark')
-            theta_method = sampling_methods.get(theta_sampling, benchmark)
+            theta_spec = training_params['theta_0']
+            theta_vals = get_theta_values(theta_spec)
 
             sampler.sample_train_local(
-                theta=theta_method(*theta_args),
-                n_samples=samples,
+                theta=theta_vals,
+                n_samples=n_samples,
                 folder=data_dir + f'/Samples_{method}_{i}',
                 filename=method + '_train',
-                test_split=split,
+                test_split=test_split,
             )
-
 
         elif method in train_global_methods:
-            theta = training_params['theta']
-            theta_sampling = theta['sampling_method']
-
-            # Default arguments in case theta is 'random_morphing_points'
-            theta_args = [theta['argument']]
-
-            # Overriding default 'theta' arguments
-            if theta_sampling == 'random_morphing_points':
-                theta_args = generate_theta_args(theta)
-
-            # Getting the specified sampling method (defaults to 'benchmark')
-            theta_method = sampling_methods.get(theta_sampling, benchmark)
+            theta_spec = training_params['theta_0']
+            theta_vals = get_theta_values(theta_spec)
 
             sampler.sample_train_density(
-                theta=theta_method(*theta_args),
-                n_samples=samples,
+                theta=theta_vals,
+                n_samples=n_samples,
                 folder=data_dir + f'/Samples_{method}_{i}',
                 filename=method + '_train',
-                test_split=split,
+                test_split=test_split,
             )
-
 
         else:
             raise ValueError('Invalid sampling method')
