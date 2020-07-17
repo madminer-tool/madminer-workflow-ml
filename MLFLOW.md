@@ -114,5 +114,6 @@ make yadage-run
 [mlflow-cli-docs]: https://www.mlflow.org/docs/latest/cli.html
 [mlflow-track-docs]: https://mlflow.org/docs/latest/tracking.html
 [mlproject-docs]: https://www.mlflow.org/docs/latest/projects.html
-[script-eval]: scripts/3_evaluation.sh
 [script-train]: scripts/2_training.sh
+[script-eval]: scripts/3_evaluation.sh
+[yadage-repo]: https://github.com/yadage/yadage
