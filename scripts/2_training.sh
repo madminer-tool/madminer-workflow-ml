@@ -49,5 +49,15 @@ mkdir -p "${MODEL_INFO_ABS_PATH}"
 
 
 # Perform actions
-python3 "${PROJECT_PATH}/code/train.py" "${TRAIN_FOLDER}" "${INPUT_FILE}" "${OUTPUT_DIR}"
+mlflow run \
+    --experiment-name "madminer-ml-train" \
+    --entry-point "train" \
+    --backend "local" \
+    --no-conda \
+    --param-list "project_path=${PROJECT_PATH}" \
+    --param-list "input_file=${INPUT_FILE}" \
+    --param-list "train_folder=${TRAIN_FOLDER}" \
+    --param-list "output_dir=${OUTPUT_DIR}" \
+    "${PROJECT_PATH}"
+
 tar -czvf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .

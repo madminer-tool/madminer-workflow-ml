@@ -26,7 +26,9 @@ training:
   environment: *common_env_ml
   process:
     process_type: string-interpolated-cmd
-    cmd: scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
+    cmd:
+        export MLFLOW_TRACKING_URI={mlflow_server} &&
+        scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
@@ -36,7 +38,9 @@ evaluating:
   environment: *common_env_ml
   process:
     process_type: string-interpolated-cmd
-    cmd: scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir}
+    cmd:
+        export MLFLOW_TRACKING_URI={mlflow_server} &&
+        scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_files

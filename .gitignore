@@ -1,6 +1,7 @@
 # Ignore local execution directories
 .workdir
 .yadage
+mlruns
 
 # Ignore any macOS files
 **/.DS_Store

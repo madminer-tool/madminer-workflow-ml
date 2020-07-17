@@ -3,6 +3,10 @@
 FROM madminertool/docker-madminer:latest
 
 
+#### Install binary dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends git
+
+
 #### Set working directory
 WORKDIR /madminer
 
@@ -10,7 +14,7 @@ WORKDIR /madminer
 COPY code ./code
 COPY data ./data
 COPY scripts ./scripts
-COPY requirements.txt .
+COPY MLproject requirements.txt ./
 
 
 # Install Python3 dependencies
