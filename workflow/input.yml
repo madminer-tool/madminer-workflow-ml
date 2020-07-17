@@ -1,55 +1,76 @@
-###########################
-#### STEP: CONFIGURATE ####
-###########################
+############################
+### SHARED AMONG STEPS #####
+############################
 
-include_nuisance_parameters: False
-methods: ['sally', 'alices', 'alice']
-
-# Also used in the 'evaluation' step
 n_samples:
   train: 1000
   test: 100
 
-# also used in the 'evaluation' step
 test_split: 0.5
 
+# Region of theory we want to test
+asymptotic_limits:
+  region:
+    theta_0:
+      min: -20.0
+      max: 20.0
+    theta_1:
+      min: -20.0
+      max: 20.0
+  resolutions: [25, 25]
+  theta_true: [0.0 ,0.0]
+
+
+###########################
+###### STEP: SAMPLING #####
+###########################
+
+include_nuisance_parameters: False
+methods: ['alice', 'alices', 'sally']
+
 # Defining each method own parameters
-sally:
-  theta:
-    sampling_method: 'benchmark'
-    argument: 'sm'
-alices:
-  theta_0:
-    sampling_method: 'random_morphing_points'
-    n_thetas: 20
-    prior:
-      parameter_0:
-        prior_shape: 'gaussian'
-        prior_param_0: 0.0
-        prior_param_1: 1.0
-      parameter_1:
-        prior_shape: 'gaussian'
-        prior_param_0: 0.0
-        prior_param_1: 1.0
-  theta_1:
-    sampling_method: 'benchmark'
-    argument: 'sm'
 alice:
+  # When selecting random_morphing points as sampling method, the number of prior parameters
+  # must be equal to the parameters specified in the Physics workflow 'input.yml' file
+  # Ref: https://github.com/scailfin/madminer-workflow-ph/blob/master/workflow/input.yml#L5
   theta_0:
     sampling_method: 'random_morphing_points'
-    n_thetas: 20
+    sampling_number: 20
     prior:
-      parameter_0:
-        prior_shape: 'gaussian'
-        prior_param_0: 0.0
-        prior_param_1: 1.0
-      parameter_1:
-        prior_shape: 'gaussian'
-        prior_param_0: 0.0
-        prior_param_1: 1.0
+      - parameter_0:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+      - parameter_1:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
   theta_1:
     sampling_method: 'benchmark'
-    argument: 'sm'
+    sampling_arg: 'sm'
+alices:
+  # When selecting random_morphing points as sampling method, the number of prior parameters
+  # must be equal to the parameters specified in the Physics workflow 'input.yml' file
+  # Ref: https://github.com/scailfin/madminer-workflow-ph/blob/master/workflow/input.yml#L5
+  theta_0:
+    sampling_method: 'random_morphing_points'
+    sampling_number: 20
+    prior:
+      - parameter_0:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+      - parameter_1:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+  theta_1:
+    sampling_method: 'benchmark'
+    sampling_arg: 'sm'
+sally:
+  theta_0:
+    sampling_method: 'benchmark'
+    sampling_arg: 'sm'
 
 
 ##########################
@@ -66,26 +87,17 @@ validation_split: 0.3
 #### STEP: EVALUATION ####
 ##########################
 
-luminosity: 10000.0
+include_xsec: [True, False]
+histogram_vars: pt_j1
 
-# Region of theory we want to test
-asymptotic_limits:
-  bool: True
-  region:
-    theta0_min_max: [-20.0,20.0]
-    theta1_min_max: [-20.0,20.0]
-  resolutions: [25,25]
-  theta_true: [0.0,0.0]
-  hist_vars: pt_j1
-  include_xsec: [True, False]  # [True] or [False] or [True, False]
-  n_samples_per_theta: 1000
+luminosity: 10000.0
 
 fisher_information:
   bool: True
-  theta_true: [0.0,0.0]
-  observable: pt_aa
-  bins: [30.0,100.0,200.0,400.0]
-  histrange: (30.0,400.0)
+  observable: pt_j1
+  histogram_bins: [30.0, 100.0, 200.0, 400.0]
+  histogram_range: [30.0, 400.0]
+  theta_true: [0.0, 0.0]
 
 
 ##########################
