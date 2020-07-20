@@ -39,7 +39,8 @@ fi
 # Perform actions
 mkdir -p "${OUTPUT_DIR}/plots"
 
-for file in ${RESULT_FILES}; do
+# POSIX shell scripts do not allow arrays (workaround)
+echo "${RESULT_FILES}" | tr ' ' '\n' | while read -r file; do
     tar -xvf "${file}" -C "${OUTPUT_DIR}";
 done
 

@@ -31,10 +31,10 @@ path_split = os.path.split(os.path.abspath(samples_path))
 sub_folder = path_split[1]
 method = str(sub_folder.split("_", 3)[1])
 
-alpha = float(inputs['alpha'])
-batch_size = int(inputs['batch_size'])
-num_epochs = int(inputs['num_epochs'])
-valid_split = float(inputs['validation_split'])
+alpha = inputs['alpha']
+batch_size = inputs['batch_size']
+num_epochs = inputs['num_epochs']
+valid_split = inputs['validation_split']
 
 
 ############################

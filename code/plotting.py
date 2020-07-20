@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import logging
 import matplotlib
 import math
 import numpy as np
@@ -8,21 +7,14 @@ import sys
 import yaml
 from matplotlib import pyplot as plt
 from pathlib import Path
+from shared.steps_logging import setup_logger
 
 
 ##########################
 ##### Set up logging #####
 ##########################
 
-logging.basicConfig(
-    format='%(asctime)-5.5s %(name)-20.20s %(levelname)-7.7s %(message)s',
-    datefmt='%H:%M',
-    level=logging.INFO
-)
-
-for key in logging.Logger.manager.loggerDict:
-    if "madminer" not in key:
-        logging.getLogger(key).setLevel(logging.WARNING)
+setup_logger("INFO")
 
 
 ############################
@@ -65,8 +57,11 @@ plotting_method = str(plotting['all_methods_pvalue'])
 asymptotic = dict(inputs['asymptotic_limits'])
 resolutions = list(asymptotic['resolutions'])
 asymp_region = dict(asymptotic['region'])
-theta_0_min, theta_0_max = asymp_region['theta0_min_max']
-theta_1_min, theta_1_max = asymp_region['theta1_min_max']
+
+theta_0_min = asymp_region['theta_0']['min']
+theta_0_max = asymp_region['theta_0']['max']
+theta_1_min = asymp_region['theta_1']['min']
+theta_1_max = asymp_region['theta_1']['max']
 
 matplotlib.use('Agg')
 
@@ -157,7 +152,7 @@ def do_plot(
         # Contours
         plt.contour(
             theta_0_centers,
-            theta_0_centers,
+            theta_1_centers,
             p_values_expected[index].reshape((resolution, resolution)),
             levels=[0.61],
             linestyles=styles[index],
@@ -182,17 +177,17 @@ def do_plot(
         plt.legend()
 
     plt.tight_layout()
-    plt.savefig(plots_dir + '/all_methods_separate.png')
+    plt.savefig(f'{plots_dir}/all_methods_separate.png')
 
 
 #############################
 ## Load previous rate data ##
 #############################
 
-loaded_grid_data = np.load(rates_dir + '/grid.npy', allow_pickle=True)
-loaded_rate_data = np.load(rates_dir + '/rate.npy', allow_pickle=True)
-loaded_histo_data = np.load(rates_dir + '/histo.npy', allow_pickle=True)
-loaded_histo_kin_data = np.load(rates_dir + '/histo_kin.npy', allow_pickle=True)
+loaded_grid_data = np.load(f'{rates_dir}/grid.npy', allow_pickle=True)
+loaded_rate_data = np.load(f'{rates_dir}/rate.npy', allow_pickle=True)
+loaded_histo_data = np.load(f'{rates_dir}/histo.npy', allow_pickle=True)
+loaded_histo_kin_data = np.load(f'{rates_dir}/histo_kin.npy', allow_pickle=True)
 
 variables_to_plot = {
     'theta_grid': loaded_grid_data,
@@ -223,10 +218,11 @@ for method in methods:
     else:
         raise ValueError('Invalid method')
 
-    variables_to_plot['p_values_expected_' + method] = a[0]
-    variables_to_plot['best_fit_expected_' + method] = a[1]
-    variables_to_plot['p_values_expected_' + method + '_kin'] = b[0]
-    variables_to_plot['best_fit_expected_' + method + '_kin'] = b[1]
+    variables_to_plot[f'p_values_expected_{method}'] = a[0]
+    variables_to_plot[f'p_values_expected_{method}_kin'] = b[0]
+
+    variables_to_plot[f'best_fit_expected_{method}'] = a[1]
+    variables_to_plot[f'best_fit_expected_{method}_kin'] = b[1]
 
 
 #############################
@@ -278,7 +274,7 @@ if plotting['all_methods']:
 
         plt.contour(
             theta_0_centers,
-            theta_0_centers,
+            theta_1_centers,
             variables_to_plot['p_values_expected_' + method].reshape([resolutions[0], resolutions[1]]),
             levels=[0.61],
             linestyles='-',
@@ -286,7 +282,7 @@ if plotting['all_methods']:
         )
         plt.contour(
             theta_0_centers,
-            theta_0_centers,
+            theta_1_centers,
             variables_to_plot['p_values_expected_' + method + '_kin'].reshape([resolutions[0], resolutions[1]]),
             levels=[0.61],
             linestyles='--',
@@ -313,7 +309,7 @@ if plotting['all_methods']:
     # Plot rates
     plt.contour(
         theta_0_centers,
-        theta_0_centers,
+        theta_1_centers,
         variables_to_plot['p_values_expected_rate'].reshape([resolutions[0], resolutions[1]]),
         levels=[0.61],
         linestyles='-',
@@ -331,7 +327,7 @@ if plotting['all_methods']:
     # Plot histogram
     plt.contour(
         theta_0_centers,
-        theta_0_centers,
+        theta_1_centers,
         variables_to_plot['p_values_expected_histo'].reshape([resolutions[0], resolutions[1]]),
         levels=[0.61],
         linestyles='-',
@@ -350,7 +346,7 @@ if plotting['all_methods']:
     # Plot kin
     plt.contour(
         theta_0_centers,
-        theta_0_centers,
+        theta_1_centers,
         variables_to_plot['p_values_expected_histo_kin'].reshape([resolutions[0], resolutions[1]]),
         levels=[0.61],
         linestyles='--',
