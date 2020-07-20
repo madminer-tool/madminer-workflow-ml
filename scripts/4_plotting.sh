@@ -41,7 +41,7 @@ mkdir -p "${OUTPUT_DIR}/plots"
 
 # POSIX shell scripts do not allow arrays (workaround)
 echo "${RESULT_FILES}" | tr ' ' '\n' | while read -r file; do
-    tar -xvf "${file}" -C "${OUTPUT_DIR}";
+    tar -xf "${file}" -C "${OUTPUT_DIR}";
 done
 
 python3 "${PROJECT_PATH}/code/plotting.py" "${INPUT_FILE}" "${OUTPUT_DIR}"
