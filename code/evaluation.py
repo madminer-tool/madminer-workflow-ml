@@ -268,7 +268,7 @@ for flag in include_xsec:
         hist_vars=[histogram_var],
     )
 
-    file_dir = f'{results_dir}'
+    file_dir = f'{rates_dir}'
     file_name = 'histo.npy' if flag else 'histo_kin.npy'
     file_path = f'{file_dir}/{file_name}'
 
