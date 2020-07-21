@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import mlflow
 import numpy as np
 import os
 import sys
@@ -250,6 +251,38 @@ elif gen_method in score_estimator_methods:
 
 else:
     raise ValueError('Invalid generation method')
+
+
+#################################
+## MLFlow tracking information ##
+#################################
+
+mlflow.set_tags({
+    "context": "workflow",
+    "method": gen_method,
+})
+
+mlflow.log_params({
+    "asymptotic_limits": asymp_info,
+    "luminosity": luminosity,
+    "test split": test_split,
+})
+
+if gen_method in ratio_estimator_methods:
+    llr_means = np.mean(llr, axis=0)
+    mlflow.log_metrics({
+        "theta 0 LLR": llr_means[0],
+        "theta 1 LLR": llr_means[1],
+    })
+
+elif gen_method in score_estimator_methods:
+    score_means = np.mean(scores, axis=0)
+    mlflow.log_metrics({
+        "theta 0 score": score_means[0],
+        "theta 1 score": score_means[1],
+    })
+
+mlflow.log_artifacts(f'{results_dir}/{gen_method}')
 
 
 #################################
