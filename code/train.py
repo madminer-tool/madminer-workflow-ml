@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import mlflow
 import os
 import sys
 import yaml
@@ -82,3 +83,22 @@ os.makedirs(model_folder_path, exist_ok=True)
 model_file_name = method
 model_file_path = f'{model_folder_path}/{model_file_name}'
 estimator.save(model_file_path)
+
+
+#################################
+## MLFlow tracking information ##
+#################################
+
+mlflow.set_tags({
+    "context": "workflow",
+    "method": method,
+})
+
+mlflow.log_params({
+    "alpha": alpha,
+    "batch size": batch_size,
+    "num. epochs": num_epochs,
+    "validation split": valid_split,
+})
+
+mlflow.log_artifacts(model_folder_path)
