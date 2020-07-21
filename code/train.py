@@ -41,18 +41,10 @@ valid_split = inputs['validation_split']
 ##### Perform training #####
 ############################
 
-score_estimator_methods = {'sally', 'sallino'}
 ratio_estimator_methods = {'alice', 'alices', 'cascal', 'carl', 'rolr', 'rascal'}
+score_estimator_methods = {'sally', 'sallino'}
 
-if method in score_estimator_methods:
-    estimator = ScoreEstimator()
-    estimator.train(
-        method=method,
-        x=samples_path + f'/x_{method}_train.npy',
-        t_xz=samples_path + f'/t_xz_{method}_train.npy',
-    )
-
-elif method in ratio_estimator_methods:
+if method in ratio_estimator_methods:
     estimator = ParameterizedRatioEstimator(n_hidden=(100, 100, 100))
     estimator.train(
         method=method,
@@ -65,6 +57,14 @@ elif method in ratio_estimator_methods:
         n_epochs=num_epochs,
         validation_split=valid_split,
         batch_size=batch_size,
+    )
+
+elif method in score_estimator_methods:
+    estimator = ScoreEstimator()
+    estimator.train(
+        method=method,
+        x=samples_path + f'/x_{method}_train.npy',
+        t_xz=samples_path + f'/t_xz_{method}_train.npy',
     )
 
 else:
