@@ -12,12 +12,23 @@ name: madminer-workflow-ml
 entry_points:
 
   train:
-    command: "python3 {project_path}/code/train.py {train_folder} {input_file} {output_dir}"
+    command: """
+      python3 {project_path}/code/train.py \
+        --alpha {alpha} \
+        --batch_size {batch_size} \
+        --num_epochs {num_epochs} \
+        --valid_split {valid_split} \
+        --output_path {output_folder} \
+        --samples_path {train_folder}
+      """
     parameters:
-      project_path: path
-      input_file: path
-      train_folder: path
-      output_dir: path
+      project_path: {type: path}
+      output_folder: {type: path}
+      train_folder: {type: path}
+      alpha: {type: float, default: 10.0}
+      batch_size: {type: float, default: 100}
+      num_epochs: {type: float, default: 2}
+      valid_split: {type: float, default: 0.3}
 
   eval:
     command: "python3 {project_path}/code/evaluation.py {input_file} {model_dir} {data_file} {output_dir}"

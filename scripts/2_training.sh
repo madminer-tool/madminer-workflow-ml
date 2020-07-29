@@ -9,27 +9,25 @@ set -o nounset
 helpFunction()
 {
     printf "\n"
-    printf "Usage: %s -p project_path -i input_file -t train_folder -o output_dir\n" "${0}"
+    printf "Usage: %s -p project_path -t train_folder -o output_dir\n" "${0}"
     printf "\t-p Project top-level path\n"
-    printf "\t-i Workflow input file\n"
     printf "\t-t Train folder path\n"
     printf "\t-o Workflow output dir\n"
     exit 1
 }
 
 # Argument parsing
-while getopts "p:i:t:o:" opt
+while getopts "p:t:o:" opt
 do
     case "$opt" in
         p ) PROJECT_PATH="$OPTARG" ;;
-        i ) INPUT_FILE="$OPTARG" ;;
         t ) TRAIN_FOLDER="$OPTARG" ;;
         o ) OUTPUT_DIR="$OPTARG" ;;
         ? ) helpFunction ;;
     esac
 done
 
-if [ -z "${PROJECT_PATH}" ] || [ -z "${INPUT_FILE}" ] || [ -z "${TRAIN_FOLDER}" ] || [ -z "${OUTPUT_DIR}" ]
+if [ -z "${PROJECT_PATH}" ] || [ -z "${TRAIN_FOLDER}" ] || [ -z "${OUTPUT_DIR}" ]
 then
     echo "Some or all of the parameters are empty";
     helpFunction
@@ -55,9 +53,8 @@ mlflow run \
     --backend "local" \
     --no-conda \
     --param-list "project_path=${PROJECT_PATH}" \
-    --param-list "input_file=${INPUT_FILE}" \
+    --param-list "output_folder=${OUTPUT_DIR}" \
     --param-list "train_folder=${TRAIN_FOLDER}" \
-    --param-list "output_dir=${OUTPUT_DIR}" \
     "${PROJECT_PATH}"
 
 tar -czvf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .

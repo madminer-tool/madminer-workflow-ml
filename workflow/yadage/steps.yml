@@ -28,7 +28,7 @@ training:
     process_type: string-interpolated-cmd
     cmd:
         export MLFLOW_TRACKING_URI={mlflow_server} &&
-        scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
+        scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file

@@ -83,7 +83,6 @@ Example:
 export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
 scripts/2_training.sh \
     -p . \
-    -i workflow/input.yml \
     -t .workdir/data/Samples_alice_0 \
     -o .workdir
 ```
