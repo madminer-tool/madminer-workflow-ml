@@ -79,8 +79,6 @@ sally:
 include_xsec: [True, False]
 histogram_vars: pt_j1
 
-luminosity: 10000.0
-
 fisher_information:
   bool: True
   observable: pt_j1

@@ -9,6 +9,7 @@
 
 name: madminer-workflow-ml
 
+
 entry_points:
 
   train:
@@ -31,10 +32,24 @@ entry_points:
       valid_split: {type: float, default: 0.3}
 
   eval:
-    command: "python3 {project_path}/code/evaluation.py {input_file} {model_dir} {data_file} {output_dir}"
+    command: """
+      python3 {project_path}/code/evaluation.py \
+        --data_file {data_file} \
+        --eval_folder {eval_folder} \
+        --inputs_file {inputs_file} \
+        --output_path {output_folder} \
+        --luminosity {luminosity} \
+        --n_samples_test {n_samples_test} \
+        --n_samples_train {n_samples_train} \
+        --test_split {test_split}
+      """
     parameters:
-      project_path: path
-      input_file: path
-      model_dir: path
-      data_file: path
-      output_dir: path
+      project_path: {type: path}
+      data_file: {type: path}
+      eval_folder: {type: path}
+      inputs_file: {type: path}
+      output_folder: {type: path}
+      luminosity: {type: float, default: 10000.0}
+      n_samples_test: {type: float, default: 100}
+      n_samples_train: {type: float, default: 1000}
+      test_split: {type: float, default: 0.5}

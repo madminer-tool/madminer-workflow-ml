@@ -70,10 +70,10 @@ mlflow run \
     --backend "local" \
     --no-conda \
     --param-list "project_path=${PROJECT_PATH}" \
-    --param-list "input_file=${INPUT_FILE}" \
-    --param-list "model_dir=${MODEL_DIR}" \
     --param-list "data_file=${DATA_FILE}" \
-    --param-list "output_dir=${OUTPUT_DIR}" \
+    --param-list "eval_folder=${MODEL_DIR}" \
+    --param-list "inputs_file=${INPUT_FILE}" \
+    --param-list "output_folder=${OUTPUT_DIR}" \
     "${PROJECT_PATH}"
 
 tar -czf "${OUTPUT_DIR}/Results_${MODEL_NAME}.tar.gz" \
