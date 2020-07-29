@@ -13,7 +13,7 @@ name: madminer-workflow-ml
 entry_points:
 
   sample:
-    command: """
+    command: " \
       python3 {project_path}/code/sampling.py \
         --data_file {data_file} \
         --inputs_file {inputs_file} \
@@ -22,7 +22,7 @@ entry_points:
         --n_sampling_runs {n_sampling_runs} \
         --nuisance {nuisance_flag} \
         --test_split {test_split}
-      """
+      "
     parameters:
       project_path: {type: path}
       data_file: {type: path}
@@ -34,7 +34,7 @@ entry_points:
       test_split: {type: float, default: 0.5}
 
   train:
-    command: """
+    command: " \
       python3 {project_path}/code/train.py \
         --alpha {alpha} \
         --batch_size {batch_size} \
@@ -42,7 +42,7 @@ entry_points:
         --valid_split {valid_split} \
         --output_path {output_folder} \
         --samples_path {train_folder}
-      """
+      "
     parameters:
       project_path: {type: path}
       output_folder: {type: path}
@@ -53,7 +53,7 @@ entry_points:
       valid_split: {type: float, default: 0.3}
 
   eval:
-    command: """
+    command: " \
       python3 {project_path}/code/evaluation.py \
         --data_file {data_file} \
         --eval_folder {eval_folder} \
@@ -63,7 +63,7 @@ entry_points:
         --n_samples_test {n_samples_test} \
         --n_samples_train {n_samples_train} \
         --test_split {test_split}
-      """
+      "
     parameters:
       project_path: {type: path}
       data_file: {type: path}
