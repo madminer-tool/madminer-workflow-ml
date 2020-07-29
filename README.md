@@ -76,10 +76,10 @@ previous step outputs, so a sequential order must be followed.
 Example:
 ```shell script
 scripts/1_sampling.sh \
-    -p . \
-    -d data/dummy_data.h5 \
-    -i workflow/input.yml \
-    -o .workdir
+    --project_path . \
+    --data_file data/dummy_data.h5 \
+    --input_file workflow/input.yml \
+    --output_dir .workdir
 ```
 
 ### B) Coordinated
