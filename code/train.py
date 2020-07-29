@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import argparse
-import mlflow
+import mlflow.pytorch
 import os
 
 from madminer.ml import ParameterizedRatioEstimator
@@ -97,3 +97,4 @@ mlflow.set_tags({
 })
 
 mlflow.log_artifacts(model_folder_path)
+mlflow.pytorch.log_model(estimator.model, method)
