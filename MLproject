@@ -12,6 +12,27 @@ name: madminer-workflow-ml
 
 entry_points:
 
+  sample:
+    command: """
+      python3 {project_path}/code/sampling.py \
+        --data_file {data_file} \
+        --inputs_file {inputs_file} \
+        --output_path {output_folder} \
+        --n_samples_train {n_samples_train} \
+        --n_sampling_runs {n_sampling_runs} \
+        --nuisance {nuisance_flag} \
+        --test_split {test_split}
+      """
+    parameters:
+      project_path: {type: path}
+      data_file: {type: path}
+      inputs_file: {type: path}
+      output_folder: {type: path}
+      n_samples_train: {type: float, default: 1000}
+      n_sampling_runs: {type: float, default: 1}
+      nuisance_flag: {type: float, default: 0}
+      test_split: {type: float, default: 0.5}
+
   train:
     command: """
       python3 {project_path}/code/train.py \

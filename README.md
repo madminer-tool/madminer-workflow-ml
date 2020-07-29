@@ -77,9 +77,8 @@ Example:
 ```shell script
 scripts/1_sampling.sh \
     -p . \
-    -n 1 \
-    -i workflow/input.yml \
     -d data/dummy_data.h5 \
+    -i workflow/input.yml \
     -o .workdir
 ```
 

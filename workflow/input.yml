@@ -2,11 +2,7 @@
 ### SHARED AMONG STEPS #####
 ############################
 
-n_samples:
-  train: 1000
-  test: 100
-
-test_split: 0.5
+methods: ['alice', 'alices', 'sally']
 
 # Region of theory we want to test
 asymptotic_limits:
@@ -24,9 +20,6 @@ asymptotic_limits:
 ###########################
 ###### STEP: SAMPLING #####
 ###########################
-
-include_nuisance_parameters: False
-methods: ['alice', 'alices', 'sally']
 
 alice:
   # When selecting random_morphing points as sampling method, the number of prior parameters

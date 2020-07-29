@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
-import sys
+import argparse
+import mlflow
 import yaml
 
-from pathlib import Path
 from madminer.sampling import SampleAugmenter
+
 from shared.steps_logging import logger, setup_logger
 from shared.theta_parameters import get_theta_values
 
@@ -20,25 +21,35 @@ setup_logger("INFO")
 ##### Argument parsing #####
 ############################
 
-num_train_samples = int(sys.argv[1])
-data_file = str(sys.argv[2])
-inputs_file = str(sys.argv[3])
-output_dir = Path(sys.argv[4])
+parser = argparse.ArgumentParser()
+parser.add_argument("--data_file")
+parser.add_argument("--inputs_file")
+parser.add_argument("--output_path")
+parser.add_argument("--n_samples_train", type=int)
+parser.add_argument("--n_sampling_runs", type=int)
+parser.add_argument("--nuisance", type=bool)
+parser.add_argument("--test_split", type=float)
 
-data_dir = str(output_dir.joinpath('data'))
-
-with open(inputs_file) as f:
-    inputs = yaml.safe_load(f)
+args = parser.parse_args()
+data_file = args.data_file
+inputs_file = args.inputs_file
+output_dir = args.output_path
+n_samples_train = args.n_samples_train
+n_sampling_runs = args.n_sampling_runs
+nuisance = args.nuisance
+test_split = args.test_split
 
 
 #############################
 ### Configuration parsing ###
 #############################
 
-nuisance = inputs['include_nuisance_parameters']
+data_dir = f'{output_dir}/data'
+
+with open(inputs_file) as f:
+    inputs = yaml.safe_load(f)
+
 methods = inputs['methods']
-n_samples = inputs['n_samples']['train']
-test_split = inputs['test_split']
 
 
 #############################
@@ -62,7 +73,7 @@ for method in methods:
     logger.info(f'Sampling from method: {method}')
     training_params = inputs[method]
 
-    for i in range(num_train_samples):
+    for i in range(n_sampling_runs):
 
         if method in train_ratio_methods:
             theta_0_spec = training_params['theta_0']
@@ -73,9 +84,9 @@ for method in methods:
             sampler.sample_train_ratio(
                 theta0=theta_0_vals,
                 theta1=theta_1_vals,
-                n_samples=n_samples,
-                folder=data_dir + f'/Samples_{method}_{i}',
-                filename=method + '_train',
+                n_samples=n_samples_train,
+                folder=f'{data_dir}/Samples_{method}_{i}',
+                filename=f'{method}_train',
                 test_split=test_split,
             )
 
@@ -85,9 +96,9 @@ for method in methods:
 
             sampler.sample_train_local(
                 theta=theta_vals,
-                n_samples=n_samples,
-                folder=data_dir + f'/Samples_{method}_{i}',
-                filename=method + '_train',
+                n_samples=n_samples_train,
+                folder=f'{data_dir}/Samples_{method}_{i}',
+                filename=f'{method}_train',
                 test_split=test_split,
             )
 
@@ -97,11 +108,20 @@ for method in methods:
 
             sampler.sample_train_density(
                 theta=theta_vals,
-                n_samples=n_samples,
-                folder=data_dir + f'/Samples_{method}_{i}',
-                filename=method + '_train',
+                n_samples=n_samples_train,
+                folder=f'{data_dir}/Samples_{method}_{i}',
+                filename=f'{method}_train',
                 test_split=test_split,
             )
 
         else:
             raise ValueError('Invalid sampling method')
+
+
+#################################
+## MLFlow tracking information ##
+#################################
+
+mlflow.set_tags({
+    "context": "workflow",
+})
