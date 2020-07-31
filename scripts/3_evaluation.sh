@@ -5,6 +5,10 @@ set -o errexit
 set -o nounset
 
 
+# shellcheck disable=SC1090
+. "$(dirname "$0")/mlflow_funcs.sh"
+
+
 # Argument parsing
 while [ "$#" -gt 0 ]; do
     case $1 in
@@ -13,6 +17,7 @@ while [ "$#" -gt 0 ]; do
         -i|--input_file)   input_file="$2";     shift  ;;
         -m|--model_file)   model_file="$2";     shift  ;;
         -o|--output_dir)   output_dir="$2";     shift  ;;
+        -a|--mlflow_args)  mlflow_args="$2";    shift  ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -43,8 +48,12 @@ MODEL_NAME=$(find "${MODELS_ABS_PATH}" -type d -mindepth 1 -maxdepth 1 -exec bas
 MODEL_DIR="${MODELS_ABS_PATH}/${MODEL_NAME}"
 
 
+# Prepare MLFlow optional arguments
+mlflow_parsed_args=$(parse_mlflow_args "${mlflow_args:-}")
+
+
 # Perform actions
-mlflow run \
+eval mlflow run \
     --experiment-name "madminer-ml-eval" \
     --entry-point "eval" \
     --backend "local" \
@@ -54,6 +63,7 @@ mlflow run \
     --param-list "eval_folder=${MODEL_DIR}" \
     --param-list "inputs_file=${input_file}" \
     --param-list "output_folder=${output_dir}" \
+    "${mlflow_parsed_args}" \
     "${project_path}"
 
 tar -czf "${output_dir}/Results_${MODEL_NAME}.tar.gz" \
