@@ -17,8 +17,8 @@ sampling:
   process:
     process_type: string-interpolated-cmd
     cmd:
-        export MLFLOW_TRACKING_URI={mlflow_server} &&
-        scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir}
+      export MLFLOW_TRACKING_URI={mlflow_server} &&
+      scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir} -a {mlflow_args_s}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: sampling_file
@@ -29,8 +29,8 @@ training:
   process:
     process_type: string-interpolated-cmd
     cmd:
-        export MLFLOW_TRACKING_URI={mlflow_server} &&
-        scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir}
+      export MLFLOW_TRACKING_URI={mlflow_server} &&
+      scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args_t}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
@@ -41,8 +41,8 @@ evaluating:
   process:
     process_type: string-interpolated-cmd
     cmd:
-        export MLFLOW_TRACKING_URI={mlflow_server} &&
-        scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir}
+      export MLFLOW_TRACKING_URI={mlflow_server} &&
+      scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir} -a {mlflow_args_e}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_files
