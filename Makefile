@@ -38,9 +38,9 @@ yadage-run: yadage-clean
 	@yadage-run $(YADAGE_WORKDIR) "workflow.yml" \
 		-p data_file="/madminer/data/dummy_data.h5" \
 		-p input_file="input.yml" \
-		-p mlflow_args_s="" \
-		-p mlflow_args_t="" \
-		-p mlflow_args_e="" \
+		-p mlflow_args_s="\"''\"" \
+		-p mlflow_args_t="\"''\"" \
+		-p mlflow_args_e="\"''\"" \
 		-p mlflow_server=$(MLFLOW_TRACKING_URI) \
 		-d initdir=$(YADAGE_INPUT_DIR) \
 		--toplevel $(YADAGE_SPEC_DIR)
