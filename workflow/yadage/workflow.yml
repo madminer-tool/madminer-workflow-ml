@@ -7,6 +7,7 @@ stages:
       parameters:
         data_file: {step: init, output: data_file}
         input_file: {step: init, output: input_file}
+        mlflow_args_s: {step: init, output: mlflow_args_s}
         mlflow_server: {step: init, output: mlflow_server}
         output_dir: '{workdir}'
       step: {$ref: 'steps.yml#/sampling'}
@@ -16,6 +17,7 @@ stages:
     scheduler:
       scheduler_type: multistep-stage
       parameters:
+        mlflow_args_t: {step: init, output: mlflow_args_t}
         mlflow_server: {step: init, output: mlflow_server}
         train_folder: {step: sampling, output: sampling_file}
         output_dir: '{workdir}'
@@ -31,6 +33,7 @@ stages:
       parameters:
         data_file: {step: init, output: data_file}
         input_file: {step: init, output: input_file}
+        mlflow_args_e: {step: init, output: mlflow_args_e}
         mlflow_server: {step: init, output: mlflow_server}
         model_file: {stages: training, output: output_file, unwrap: true}
         output_dir: '{workdir}'

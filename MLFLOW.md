@@ -55,12 +55,19 @@ Check the [MLFlow CLI documentation][mlflow-cli-docs] for further details.
 
 ### 3. MLFlow Python library
 Finally, the `mlflow` Python package can be used within the Python scripts to define
-_tags_, _params_ or _artifacts_ that gets appended to the launched run.
-
-These elements would appear on the MLFlow _tracking server UI_, once the experiment runs
-finish, making the runs easily identifiable and comparable to each other.
+_tags_, _params_ or _artifacts_ that gets appended to the launched run. These elements
+would appear on the MLFlow _tracking server UI_, once the experiment runs finish,
+making the runs easily identifiable and comparable to each other.
 
 Check the [MLFlow tracking documentation][mlflow-track-docs] for further details.
+
+
+## Parametrization
+The MLFlow supported steps can be dynamically parametrized by providing a set of
+space separated _key=value_ parameters that will be propagated to the corresponding
+`MLproject` entrypoint.
+
+Check the available parameters on [MLproject][mlproject].
 
 
 ## Execution
@@ -72,8 +79,7 @@ To deploy the MLFlow tracking server locally:
 mlflow server
 ```
 
-Depending on how the workflow is launched, a different tracking URI must be specified.
-There are actually two ways of executing the workflow:
+Different tracking URIs must be specified, depending on how the workflow is launched:
 
 ### A) Individual steps
 Individual steps can be launched using their shell script. Be aware their execution may depend on 
@@ -86,7 +92,8 @@ scripts/1_sampling.sh \
     --project_path . \
     --data_file data/dummy_data.h5 \
     --input_file workflow/input.yml \
-    --output_dir .workdir
+    --output_dir .workdir \
+    --mlflow_args "test_split=0.5 nuisance_flag=0"
 ```
 
 ### B) Coordinated
