@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-import mlflow
+import argparse
+import mlflow.pytorch
 import os
-import sys
-import yaml
-from pathlib import Path
 
 from madminer.ml import ParameterizedRatioEstimator
 from madminer.ml import ScoreEstimator
@@ -14,14 +12,21 @@ from madminer.ml import ScoreEstimator
 ##### Argument parsing #####
 ############################
 
-samples_path = str(sys.argv[1])
-input_file = str(sys.argv[2])
-output_dir = Path(sys.argv[3])
+parser = argparse.ArgumentParser()
+parser.add_argument("--output_path")
+parser.add_argument("--samples_path")
+parser.add_argument("--alpha", type=float)
+parser.add_argument("--batch_size", type=int)
+parser.add_argument("--num_epochs", type=int)
+parser.add_argument("--valid_split", type=float)
 
-models_dir = str(output_dir.joinpath('models'))
-
-with open(input_file) as f:
-    inputs = yaml.safe_load(f)
+args = parser.parse_args()
+output_dir = args.output_path
+samples_path = args.samples_path
+alpha = args.alpha
+batch_size = args.batch_size
+num_epochs = args.num_epochs
+valid_split = args.valid_split
 
 
 #############################
@@ -30,12 +35,9 @@ with open(input_file) as f:
 
 path_split = os.path.split(os.path.abspath(samples_path))
 sub_folder = path_split[1]
-method = str(sub_folder.split("_", 3)[1])
 
-alpha = inputs['alpha']
-batch_size = inputs['batch_size']
-num_epochs = inputs['num_epochs']
-valid_split = inputs['validation_split']
+method = str(sub_folder.split("_", 3)[1])
+models_dir = f'{output_dir}/models'
 
 
 ############################
@@ -49,23 +51,23 @@ if method in ratio_estimator_methods:
     estimator = ParameterizedRatioEstimator(n_hidden=(100, 100, 100))
     estimator.train(
         method=method,
+        x=f'{samples_path}/x_{method}_train.npy',
+        y=f'{samples_path}/y_{method}_train.npy',
+        theta=f'{samples_path}/theta0_{method}_train.npy',
+        r_xz=f'{samples_path}/r_xz_{method}_train.npy',
+        t_xz=f'{samples_path}/t_xz_{method}_train.npy',
         alpha=alpha,
-        theta=samples_path + f'/theta0_{method}_train.npy',
-        x=samples_path + f'/x_{method}_train.npy',
-        y=samples_path + f'/y_{method}_train.npy',
-        r_xz=samples_path + f'/r_xz_{method}_train.npy',
-        t_xz=samples_path + f'/t_xz_{method}_train.npy',
         n_epochs=num_epochs,
-        validation_split=valid_split,
         batch_size=batch_size,
+        validation_split=valid_split,
     )
 
 elif method in score_estimator_methods:
     estimator = ScoreEstimator()
     estimator.train(
         method=method,
-        x=samples_path + f'/x_{method}_train.npy',
-        t_xz=samples_path + f'/t_xz_{method}_train.npy',
+        x=f'{samples_path}/x_{method}_train.npy',
+        t_xz=f'{samples_path}/t_xz_{method}_train.npy',
     )
 
 else:
@@ -94,11 +96,5 @@ mlflow.set_tags({
     "method": method,
 })
 
-mlflow.log_params({
-    "alpha": alpha,
-    "batch size": batch_size,
-    "num. epochs": num_epochs,
-    "validation split": valid_split,
-})
-
 mlflow.log_artifacts(model_folder_path)
+mlflow.pytorch.log_model(estimator.model, method)

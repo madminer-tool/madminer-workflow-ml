@@ -37,6 +37,7 @@ The MLFlow CLI is used within the shell scripts corresponding to the workflow st
 are going to be either parametrized or tracked.
 
 In the case of this project, those steps are:
+- [Sampling][script-sample]: to parametrize.
 - [Training][script-train]: to parametrize.
 - [Evaluation][script-eval]: to track over time.
 
@@ -81,11 +82,11 @@ previous step outputs, so a sequential order must be followed.
 Example:
 ```shell script
 export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
-scripts/2_training.sh \
-    -p . \
-    -i workflow/input.yml \
-    -t .workdir/data/Samples_alice_0 \
-    -o .workdir
+scripts/1_sampling.sh \
+    --project_path . \
+    --data_file data/dummy_data.h5 \
+    --input_file workflow/input.yml \
+    --output_dir .workdir
 ```
 
 ### B) Coordinated
@@ -101,6 +102,7 @@ Therefore:
 
 ```shell script
 export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
+mlflow experiments create --experiment-name "madminer-ml-sample"
 mlflow experiments create --experiment-name "madminer-ml-train"
 mlflow experiments create --experiment-name "madminer-ml-eval"
 export MLFLOW_TRACKING_URI=http://host.docker.internal:5000
@@ -114,6 +116,7 @@ make yadage-run
 [mlflow-cli-docs]: https://www.mlflow.org/docs/latest/cli.html
 [mlflow-track-docs]: https://mlflow.org/docs/latest/tracking.html
 [mlproject-docs]: https://www.mlflow.org/docs/latest/projects.html
+[script-sample]: scripts/1_sampling.sh
 [script-train]: scripts/2_training.sh
 [script-eval]: scripts/3_evaluation.sh
 [yadage-repo]: https://github.com/yadage/yadage

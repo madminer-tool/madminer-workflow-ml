@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
+import argparse
 import mlflow
 import numpy as np
 import os
-import sys
 import yaml
-from pathlib import Path
 
 from madminer.fisherinformation import FisherInformation
 from madminer.limits import AsymptoticLimits
@@ -28,33 +27,45 @@ setup_logger("INFO")
 ##### Argument parsing #####
 ############################
 
-inputs_file = sys.argv[1]
-eval_folder = sys.argv[2]
-data_file = sys.argv[3]
-output_dir = Path(sys.argv[4])
+parser = argparse.ArgumentParser()
 
-model_dir = str(output_dir.joinpath('models'))
-rates_dir = str(output_dir.joinpath('rates'))
-results_dir = str(output_dir.joinpath('results'))
-tests_dir = str(output_dir.joinpath('test'))
+parser.add_argument("--data_file")
+parser.add_argument("--eval_folder")
+parser.add_argument("--inputs_file")
+parser.add_argument("--output_path")
+parser.add_argument("--luminosity", type=float)
+parser.add_argument("--n_samples_test", type=int)
+parser.add_argument("--n_samples_train", type=int)
+parser.add_argument("--test_split", type=float)
 
-with open(inputs_file) as f:
-    inputs = yaml.safe_load(f)
+args = parser.parse_args()
+data_file = args.data_file
+eval_folder = args.eval_folder
+inputs_file = args.inputs_file
+output_dir = args.output_path
+luminosity = args.luminosity
+n_samples_test = args.n_samples_test
+n_samples_train = args.n_samples_train
+test_split = args.test_split
 
 
 #############################
 ### Configuration parsing ###
 #############################
 
+model_dir = f'{output_dir}/models'
+rates_dir = f'{output_dir}/rates'
+results_dir = f'{output_dir}/results'
+tests_dir = f'{output_dir}/test'
+
+with open(inputs_file) as f:
+    inputs = yaml.safe_load(f)
+
 asymp_info = dict(inputs['asymptotic_limits'])
 fisher_info = dict(inputs['fisher_information'])
 gen_method = str(os.path.split(os.path.abspath(eval_folder))[1])
 include_xsec = list(inputs['include_xsec'])
 histogram_var = str(inputs['histogram_vars'])
-luminosity = float(inputs['luminosity'])
-test_split = float(inputs['test_split'])
-n_samples_test = int(inputs['n_samples']['test'])
-n_samples_train = int(inputs['n_samples']['train'])
 
 
 ##############################
@@ -260,12 +271,6 @@ else:
 mlflow.set_tags({
     "context": "workflow",
     "method": gen_method,
-})
-
-mlflow.log_params({
-    "asymptotic_limits": asymp_info,
-    "luminosity": luminosity,
-    "test split": test_split,
 })
 
 if gen_method in ratio_estimator_methods:

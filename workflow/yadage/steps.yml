@@ -16,7 +16,9 @@ sampling:
   environment: *common_env_ml
   process:
     process_type: string-interpolated-cmd
-    cmd: scripts/1_sampling.sh -p /madminer -n {train_samples} -i {input_file} -d {data_file} -o {output_dir}
+    cmd:
+        export MLFLOW_TRACKING_URI={mlflow_server} &&
+        scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: sampling_file
@@ -28,7 +30,7 @@ training:
     process_type: string-interpolated-cmd
     cmd:
         export MLFLOW_TRACKING_URI={mlflow_server} &&
-        scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir}
+        scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
