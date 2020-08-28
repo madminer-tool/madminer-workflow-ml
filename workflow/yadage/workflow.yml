@@ -9,6 +9,7 @@ stages:
         input_file: {step: init, output: input_file}
         mlflow_args_s: {step: init, output: mlflow_args_s}
         mlflow_server: {step: init, output: mlflow_server}
+        mlflow_username: {step: init, output: mlflow_username}
         output_dir: '{workdir}'
       step: {$ref: 'steps.yml#/sampling'}
 
@@ -19,6 +20,7 @@ stages:
       parameters:
         mlflow_args_t: {step: init, output: mlflow_args_t}
         mlflow_server: {step: init, output: mlflow_server}
+        mlflow_username: {step: init, output: mlflow_username}
         train_folder: {step: sampling, output: sampling_file}
         output_dir: '{workdir}'
       scatter:
@@ -35,6 +37,7 @@ stages:
         input_file: {step: init, output: input_file}
         mlflow_args_e: {step: init, output: mlflow_args_e}
         mlflow_server: {step: init, output: mlflow_server}
+        mlflow_username: {step: init, output: mlflow_username}
         model_file: {stages: training, output: output_file, unwrap: true}
         output_dir: '{workdir}'
       scatter:
