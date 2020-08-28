@@ -19,7 +19,7 @@ sampling:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir} -a {mlflow_args_s}
+      scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: sampling_file
@@ -32,7 +32,7 @@ training:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args_t}
+      scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
@@ -45,7 +45,7 @@ evaluating:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir} -a {mlflow_args_e}
+      scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_files
