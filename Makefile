@@ -2,6 +2,7 @@ DOCKER_NAME=madminer-workflow-ml
 DOCKER_REGISTRY=madminertool
 DOCKER_VERSION=$(shell cat ./VERSION)
 
+MLFLOW_USERNAME ?= $(shell whoami)
 MLFLOW_TRACKING_URI ?= "/tmp/mlflow"
 
 YADAGE_INPUT_DIR="$(PWD)/workflow"
@@ -42,5 +43,6 @@ yadage-run: yadage-clean
 		-p mlflow_args_t="\"''\"" \
 		-p mlflow_args_e="\"''\"" \
 		-p mlflow_server=$(MLFLOW_TRACKING_URI) \
+		-p mlflow_username=$(MLFLOW_USERNAME) \
 		-d initdir=$(YADAGE_INPUT_DIR) \
 		--toplevel $(YADAGE_SPEC_DIR)
