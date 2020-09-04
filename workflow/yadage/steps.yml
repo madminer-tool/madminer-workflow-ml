@@ -19,7 +19,7 @@ sampling:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir} -a {mlflow_args}
+      /madminer/scripts/1_sampling.sh -p /madminer -i {input_file} -d {data_file} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: sampling_file
@@ -32,7 +32,7 @@ training:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args}
+      /madminer/scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file
@@ -45,7 +45,7 @@ evaluating:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir} -a {mlflow_args}
+      /madminer/scripts/3_evaluation.sh -p /madminer -i {input_file} -m {model_file} -d {data_file} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_files
@@ -55,7 +55,7 @@ plotting:
   environment: *common_env_ml
   process:
     process_type: string-interpolated-cmd
-    cmd: scripts/4_plotting.sh -p /madminer -i {input_file} -r '{result_files}' -o {output_dir}
+    cmd: /madminer/scripts/4_plotting.sh -p /madminer -i {input_file} -r '{result_files}' -o {output_dir}
   publisher:
     publisher_type: interpolated-pub
     publish:
