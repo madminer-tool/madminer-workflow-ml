@@ -2,6 +2,7 @@
 ### SHARED AMONG STEPS #####
 ############################
 
+estimator: 'parameterized'
 methods: ['alice', 'alices', 'sally']
 
 # Region of theory we want to test
