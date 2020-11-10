@@ -32,7 +32,7 @@ training:
     cmd:
       export USERNAME={mlflow_username} &&
       export MLFLOW_TRACKING_URI={mlflow_server} &&
-      /madminer/scripts/2_training.sh -p /madminer -t {train_folder} -o {output_dir} -a {mlflow_args}
+      /madminer/scripts/2_training.sh -p /madminer -i {input_file} -t {train_folder} -o {output_dir} -a {mlflow_args}
   publisher:
     publisher_type: 'fromglob-pub'
     outputkey: output_file

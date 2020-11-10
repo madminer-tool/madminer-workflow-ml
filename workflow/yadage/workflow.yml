@@ -18,6 +18,7 @@ stages:
     scheduler:
       scheduler_type: multistep-stage
       parameters:
+        input_file: {step: init, output: input_file}
         mlflow_args: {step: init, output: mlflow_args_t}
         mlflow_server: {step: init, output: mlflow_server}
         mlflow_username: {step: init, output: mlflow_username}
