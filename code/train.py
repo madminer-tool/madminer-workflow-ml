@@ -99,7 +99,7 @@ estimator.save(model_file_path)
 #################################
 
 mlflow.set_tags(
-    {"context": "workflow", "method": method,}
+    {"context": "workflow", "method": method, "estimator": estimator,}
 )
 
 mlflow.log_artifacts(model_folder_path)
