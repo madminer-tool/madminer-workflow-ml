@@ -1,4 +1,4 @@
-madminer==0.7.4
+madminer==0.7.5
 mlflow==1.9.1
 numpy==1.18.3
 pyyaml==5.3.1
