@@ -13,6 +13,7 @@ set -o nounset
 while [ "$#" -gt 0 ]; do
     case $1 in
         -p|--project_path) project_path="$2";   shift  ;;
+        -i|--input_file)   input_file="$2";     shift  ;;
         -t|--train_folder) train_folder="$2";   shift  ;;
         -o|--output_dir)   output_dir="$2";     shift  ;;
         -a|--mlflow_args)  mlflow_args="$2";    shift  ;;
@@ -45,8 +46,9 @@ eval mlflow run \
     --backend "local" \
     --no-conda \
     --param-list "project_path=${project_path}" \
-    --param-list "output_folder=${output_dir}" \
+    --param-list "inputs_file=${input_file}" \
     --param-list "train_folder=${train_folder}" \
+    --param-list "output_folder=${output_dir}" \
     "${mlflow_parsed_args}" \
     "${project_path}"
 

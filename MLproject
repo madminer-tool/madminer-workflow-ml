@@ -40,13 +40,15 @@ entry_points:
         --batch_size {batch_size} \
         --num_epochs {num_epochs} \
         --valid_split {valid_split} \
-        --output_path {output_folder} \
-        --samples_path {train_folder}
+        --inputs_file {inputs_file} \
+        --samples_path {train_folder} \
+        --output_path {output_folder}
       "
     parameters:
       project_path: {type: path}
-      output_folder: {type: path}
+      inputs_file: {type: path}
       train_folder: {type: path}
+      output_folder: {type: path}
       alpha: {type: float, default: 10.0}
       batch_size: {type: float, default: 100}
       num_epochs: {type: float, default: 2}
