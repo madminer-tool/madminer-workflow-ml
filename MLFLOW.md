@@ -50,7 +50,7 @@ On those shell scripts, the default Python script execution has been substitute 
 - The execution environment (`--no-conda` = System).
 - Their set of parameters.
 
-Check the [MLFlow CLI documentation][mlflow-cli-docs] for further details.
+Check the [MLFlow CLI documentation][mlflow-docs-cli] for further details.
 
 
 ### 3. MLFlow Python library
@@ -59,7 +59,7 @@ _tags_, _params_ or _artifacts_ that gets appended to the launched run. These el
 would appear on the MLFlow _tracking server UI_, once the experiment runs finish,
 making the runs easily identifiable and comparable to each other.
 
-Check the [MLFlow tracking documentation][mlflow-track-docs] for further details.
+Check the [MLFlow tracking documentation][mlflow-docs-track] for further details.
 
 
 ## Parametrization
@@ -67,7 +67,7 @@ The MLFlow supported steps can be dynamically parametrized by providing a set of
 space separated _key=value_ parameters that will be propagated to the corresponding
 `MLproject` entrypoint.
 
-Check the available parameters on [MLproject][mlproject].
+Check the available parameters on [MLproject][mlproject-file].
 
 
 ## Execution
@@ -76,7 +76,7 @@ to log the experiment runs information to a MLFlow tracking server previously de
 
 To deploy the MLFlow tracking server locally:
 ```shell script
-mlflow server
+mlflow server --host "0.0.0.0"
 ```
 
 Different tracking URIs must be specified, depending on how the workflow is launched:
@@ -87,7 +87,7 @@ previous step outputs, so a sequential order must be followed.
 
 Example:
 ```shell script
-export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
+export MLFLOW_TRACKING_URI="http://0.0.0.0:5000"
 scripts/1_sampling.sh \
     --project_path . \
     --data_file data/dummy_data.h5 \
@@ -106,23 +106,26 @@ the tracking server must be reachable from **within** the Docker container.
 Therefore:
 - Create experiments beforehand to avoid race conditions.
 - Define `host.docker.internal` as tracking server host.
+- Define `--add-host host.docker.internal:host-gateway` as Docker arg. **Linux only**.
 
 ```shell script
-export MLFLOW_TRACKING_URI=http://127.0.0.1:5000
+export MLFLOW_TRACKING_URI="http://0.0.0.0:5000"
 mlflow experiments create --experiment-name "madminer-ml-sample"
 mlflow experiments create --experiment-name "madminer-ml-train"
 mlflow experiments create --experiment-name "madminer-ml-eval"
-export MLFLOW_TRACKING_URI=http://host.docker.internal:5000
+
+export MLFLOW_TRACKING_URI="http://host.docker.internal:5000"
+export PACKTIVITY_DOCKER_CMD_MOD="--add-host host.docker.internal:host-gateway"
 pip3 install yadage
 make yadage-run
 ```
 
 
 [mlflow-website]: https://mlflow.org/
-[mlproject]: MLproject
-[mlflow-cli-docs]: https://www.mlflow.org/docs/latest/cli.html
-[mlflow-track-docs]: https://mlflow.org/docs/latest/tracking.html
+[mlflow-docs-cli]: https://www.mlflow.org/docs/latest/cli.html
+[mlflow-docs-track]: https://mlflow.org/docs/latest/tracking.html
 [mlproject-docs]: https://www.mlflow.org/docs/latest/projects.html
+[mlproject-file]: MLproject
 [script-sample]: scripts/1_sampling.sh
 [script-train]: scripts/2_training.sh
 [script-eval]: scripts/3_evaluation.sh
