@@ -88,10 +88,10 @@ over a set of utilities that are used to coordinate workflows. Please consider t
 to define Yadage workflows as the [Yadage documentation][yadage-docs] is incomplete.
 For learning about Yadage hidden features contact [Lukas Heinrich][lukas-profile], Yadage creator.
 
-Yadage depends on having a Docker image used as environment already published. For publishing the Docker
-image for this workflow jump to the [Docker section](#docker).
+Yadage depends on having the Docker image used as environment available on DockerHub. For pushing the
+Docker image for this workflow, jump to the [Docker section](#docker).
 
-Once the Docker image is published:
+Once the Docker image has been pushed:
 ```shell script
 pip3 install yadage
 make yadage-run
@@ -99,12 +99,12 @@ make yadage-run
 
 
 ## Docker
-To build a new Docker image for local testing:
+To build a new Docker image:
 ```shell script
 make build
 ```
 
-To publish a new Docker image, bump up the `VERSION` number and execute:
+To push a new Docker image, bump up the `VERSION` number and execute:
 
 ```shell script
 export DOCKERUSER=<your_dockerhub_username>
