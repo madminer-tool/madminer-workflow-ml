@@ -3,7 +3,7 @@ DOCKER_REGISTRY=madminertool
 DOCKER_VERSION=$(shell cat ./VERSION)
 
 MLFLOW_USERNAME ?= $(shell whoami)
-MLFLOW_TRACKING_URI ?= "/tmp/mlflow"
+MLFLOW_TRACKING_URI ?= "file:///_mlflow"
 
 YADAGE_INPUT_DIR="$(PWD)/workflow"
 YADAGE_SPEC_DIR="$(PWD)/workflow/yadage"
