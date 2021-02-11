@@ -48,9 +48,24 @@ MODEL_NAME=$(find "${MODELS_ABS_PATH}" -type d -mindepth 1 -maxdepth 1 -exec bas
 MODEL_DIR="${MODELS_ABS_PATH}/${MODEL_NAME}"
 
 
+### IMPORTANT NOTE:
+###
+### When the MLFlow metrics / artifacts are stored locally, the provided MLFlow
+### Tracking URI must be sanitized, to inject the WORKDIR value at the beginning.
+###
+### This is necessary to avoid file permission errors in REANA.
+### Ref: https://github.com/scailfin/madminer-workflow/issues/40
+
+if [ -n "${MLFLOW_TRACKING_URI:-}" ]; then
+    uri="${MLFLOW_TRACKING_URI}"
+    uri=$(sanitize_tracking_uri "${uri}" "${output_dir}")
+
+    export MLFLOW_TRACKING_URI=${uri}
+fi
+
+
 # Prepare MLFlow optional arguments
 mlflow_parsed_args=$(parse_mlflow_args "${mlflow_args:-}")
-
 
 # Perform actions
 eval mlflow run \
