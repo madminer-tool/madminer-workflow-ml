@@ -1,5 +1,7 @@
 madminer==0.7.6
-mlflow==1.9.1
 numpy==1.18.3
 pyyaml==5.3.1
 torchvision==0.7.0
+
+# Install from GitHub (to allow skinny version)
+git+https://github.com/mlflow/mlflow@v1.14.1
