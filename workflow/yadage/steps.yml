@@ -5,7 +5,7 @@
 common_env_ml: &common_env_ml
     environment_type: 'docker-encapsulated'
     image: 'madminertool/madminer-workflow-ml'
-    imagetag: '0.2.3'
+    imagetag: '0.3.0'
 
 
 #######################################
