@@ -16,3 +16,19 @@ parse_mlflow_args() {
         done
     fi
 }
+
+
+sanitize_tracking_uri() {
+    tracking_uri="${1}"
+    workable_dir="${2}"
+
+    # Remove the 'file:///' prefix
+    sanitized_path=${tracking_uri#'file:///'}
+
+    # If the provided URI does not contains it: return
+    if [ "${tracking_uri}" = "${sanitized_path}" ]; then
+        printf "%s" "${tracking_uri}"
+    else
+        printf "%s" "${workable_dir}/${sanitized_path}"
+    fi
+}

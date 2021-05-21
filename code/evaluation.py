@@ -8,10 +8,10 @@ import yaml
 
 from madminer.fisherinformation import FisherInformation
 from madminer.limits import AsymptoticLimits
-from madminer.ml import ParameterizedRatioEstimator
 from madminer.ml import ScoreEstimator
 from madminer.sampling import SampleAugmenter
 
+from shared.ratio_estimators import get_ratio_estimator
 from shared.steps_logging import logger, setup_logger
 from shared.theta_parameters import get_theta_values
 
@@ -66,6 +66,7 @@ fisher_info = dict(inputs['fisher_information'])
 gen_method = str(os.path.split(os.path.abspath(eval_folder))[1])
 include_xsec = list(inputs['include_xsec'])
 histogram_var = str(inputs['histogram_vars'])
+estimator_name = str(inputs['estimator'])
 
 
 ##############################
@@ -221,8 +222,11 @@ if gen_method in ratio_estimator_methods:
     # Testing data is generated
     generate_test_data_ratio(gen_method)
 
+    # The desired ratio estimator is selected
+    estimator_cls = get_ratio_estimator(estimator_name)
+
     # The trained model, theta grid and the test data are loaded
-    estimator = ParameterizedRatioEstimator()
+    estimator = estimator_cls()
     estimator.load(f'{eval_folder}/{gen_method}')
     grid = np.load(f'{rates_dir}/grid.npy')
     test = np.load(f'{tests_dir}/{gen_method}/x_test.npy')
@@ -270,6 +274,7 @@ else:
 
 mlflow.set_tags({
     "context": "workflow",
+    "estimator": estimator_name,
     "method": gen_method,
 })
 

@@ -13,6 +13,7 @@ set -o nounset
 while [ "$#" -gt 0 ]; do
     case $1 in
         -p|--project_path) project_path="$2";   shift  ;;
+        -i|--input_file)   input_file="$2";     shift  ;;
         -t|--train_folder) train_folder="$2";   shift  ;;
         -o|--output_dir)   output_dir="$2";     shift  ;;
         -a|--mlflow_args)  mlflow_args="$2";    shift  ;;
@@ -34,9 +35,24 @@ rm -rf "${MODEL_INFO_ABS_PATH}"
 mkdir -p "${MODEL_INFO_ABS_PATH}"
 
 
+### IMPORTANT NOTE:
+###
+### When the MLFlow metrics / artifacts are stored locally, the provided MLFlow
+### Tracking URI must be sanitized, to inject the WORKDIR value at the beginning.
+###
+### This is necessary to avoid file permission errors in REANA.
+### Ref: https://github.com/scailfin/madminer-workflow/issues/40
+
+if [ -n "${MLFLOW_TRACKING_URI:-}" ]; then
+    uri="${MLFLOW_TRACKING_URI}"
+    uri=$(sanitize_tracking_uri "${uri}" "${output_dir}")
+
+    export MLFLOW_TRACKING_URI=${uri}
+fi
+
+
 # Prepare MLFlow optional arguments
 mlflow_parsed_args=$(parse_mlflow_args "${mlflow_args:-}")
-
 
 # Perform actions
 eval mlflow run \
@@ -45,8 +61,9 @@ eval mlflow run \
     --backend "local" \
     --no-conda \
     --param-list "project_path=${project_path}" \
-    --param-list "output_folder=${output_dir}" \
+    --param-list "inputs_file=${input_file}" \
     --param-list "train_folder=${train_folder}" \
+    --param-list "output_folder=${output_dir}" \
     "${mlflow_parsed_args}" \
     "${project_path}"
 

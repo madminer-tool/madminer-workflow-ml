@@ -3,12 +3,10 @@
 import argparse
 import mlflow.pytorch
 import os
+import yaml
 
-from madminer.ml import (
-    ParameterizedRatioEstimator,
-    QuadraticMorphingAwareRatioEstimator,
-)
 from madminer.ml import ScoreEstimator
+from shared.ratio_estimators import get_ratio_estimator
 
 
 ############################
@@ -16,32 +14,38 @@ from madminer.ml import ScoreEstimator
 ############################
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--output_path")
+parser.add_argument("--inputs_file")
 parser.add_argument("--samples_path")
+parser.add_argument("--output_path")
 parser.add_argument("--alpha", type=float)
 parser.add_argument("--batch_size", type=int)
 parser.add_argument("--num_epochs", type=int)
 parser.add_argument("--valid_split", type=float)
-parser.add_argument("--quadratic_classifier", type=bool)
 
 args = parser.parse_args()
-output_dir = args.output_path
+inputs_file = args.inputs_file
 samples_path = args.samples_path
+output_dir = args.output_path
 alpha = args.alpha
 batch_size = args.batch_size
 num_epochs = args.num_epochs
 valid_split = args.valid_split
-quadratic_classifier = args.quadratic_classifier
+
 
 #############################
 ### Configuration parsing ###
 #############################
 
+models_dir = f"{output_dir}/models"
+
 path_split = os.path.split(os.path.abspath(samples_path))
 sub_folder = path_split[1]
-
 method = str(sub_folder.split("_", 3)[1])
-models_dir = f"{output_dir}/models"
+
+with open(inputs_file) as f:
+    inputs = yaml.safe_load(f)
+
+estimator_name = inputs["estimator"]
 
 
 ############################
@@ -52,10 +56,8 @@ ratio_estimator_methods = {"alice", "alices", "cascal", "carl", "rolr", "rascal"
 score_estimator_methods = {"sally", "sallino"}
 
 if method in ratio_estimator_methods:
-    if quadratic_classifier:
-        estimator = QuadraticMorphingAwareRatioEstimator(n_hidden=(100, 100, 100))
-    else:
-        estimator = ParameterizedRatioEstimator(n_hidden=(100, 100, 100))
+    estimator_cls = get_ratio_estimator(estimator_name)
+    estimator = estimator_cls(n_hidden=(100, 100, 100))
     estimator.train(
         method=method,
         x=f"{samples_path}/x_{method}_train.npy",
@@ -98,9 +100,11 @@ estimator.save(model_file_path)
 ## MLFlow tracking information ##
 #################################
 
-mlflow.set_tags(
-    {"context": "workflow", "method": method,}
-)
+mlflow.set_tags({
+    "context": "workflow",
+    "estimator": estimator_name,
+    "method": method,
+})
 
 mlflow.log_artifacts(model_folder_path)
 mlflow.pytorch.log_model(estimator.model, method)
