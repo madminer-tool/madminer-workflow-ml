@@ -1,0 +1,94 @@
+############################
+### SHARED AMONG STEPS #####
+############################
+
+estimator: 'parameterized'
+methods: ['carl', 'rolr', 'sally']
+
+# Region of theory we want to test
+asymptotic_limits:
+  region:
+    theta_0:
+      min: -20.0
+      max: 20.0
+    theta_1:
+      min: -20.0
+      max: 20.0
+  resolutions: [25, 25]
+  theta_true: [0.0 ,0.0]
+
+
+###########################
+###### STEP: SAMPLING #####
+###########################
+
+carl:
+  # When selecting random_morphing points as sampling method, the number of prior parameters
+  # must be equal to the parameters specified in the Physics workflow 'input.yml' file
+  # Ref: https://github.com/scailfin/madminer-workflow-ph/blob/master/workflow/input.yml#L5
+  theta_0:
+    sampling_method: 'random_morphing_points'
+    sampling_number: 20
+    prior:
+      - parameter_0:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+      - parameter_1:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+  theta_1:
+    sampling_method: 'benchmark'
+    sampling_arg: 'sm'
+rolr:
+  # When selecting random_morphing points as sampling method, the number of prior parameters
+  # must be equal to the parameters specified in the Physics workflow 'input.yml' file
+  # Ref: https://github.com/scailfin/madminer-workflow-ph/blob/master/workflow/input.yml#L5
+  theta_0:
+    sampling_method: 'random_morphing_points'
+    sampling_number: 20
+    prior:
+      - parameter_0:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+      - parameter_1:
+          prior_shape: 'gaussian'
+          prior_param_0: 0.0
+          prior_param_1: 1.0
+  theta_1:
+    sampling_method: 'benchmark'
+    sampling_arg: 'sm'
+sally:
+  theta_0:
+    sampling_method: 'benchmark'
+    sampling_arg: 'sm'
+
+
+##########################
+#### STEP: EVALUATION ####
+##########################
+
+include_xsec: [True, False]
+histogram_vars: pt_j1
+
+fisher_information:
+  bool: True
+  observable: pt_j1
+  histogram_bins: [30.0, 100.0, 200.0, 400.0]
+  histogram_range: [30.0, 400.0]
+  theta_true: [0.0, 0.0]
+
+
+##########################
+##### STEP: PLOTTING #####
+##########################
+
+plotting:
+  all_methods: True
+  all_methods_pvalue: 'carl'  # Method must be declare above
+  all_methods_separate: True
+  correlations: True
+  correlations_methods: ['carl','rolr']
+  rates: True
