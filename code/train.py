@@ -100,11 +100,13 @@ estimator.save(model_file_path)
 ## MLFlow tracking information ##
 #################################
 
-mlflow.set_tags({
-    "context": "workflow",
-    "estimator": estimator_name,
-    "method": method,
-})
+mlflow.set_tags(
+    {
+        "context": "workflow",
+        "estimator": estimator_name,
+        "method": method,
+    }
+)
 
 mlflow.log_artifacts(model_folder_path)
 mlflow.pytorch.log_model(estimator.model, method)

@@ -44,12 +44,12 @@ test_split = args.test_split
 ### Configuration parsing ###
 #############################
 
-data_dir = f'{output_dir}/data'
+data_dir = f"{output_dir}/data"
 
 with open(inputs_file) as f:
     inputs = yaml.safe_load(f)
 
-methods = inputs['methods']
+methods = inputs["methods"]
 
 
 #############################
@@ -64,20 +64,20 @@ sampler = SampleAugmenter(data_file, include_nuisance_parameters=nuisance)
 #############################
 
 # Different methods have different arguments
-train_ratio_methods = {'alice', 'alices', 'cascal', 'carl', 'rolr', 'rascal'}
-train_local_methods = {'sally', 'sallino'}
-train_global_methods = {'scandal'}
+train_ratio_methods = {"alice", "alices", "cascal", "carl", "rolr", "rascal"}
+train_local_methods = {"sally", "sallino"}
+train_global_methods = {"scandal"}
 
 # Iterate through the methods
 for method in methods:
-    logger.info(f'Sampling from method: {method}')
+    logger.info(f"Sampling from method: {method}")
     training_params = inputs[method]
 
     for i in range(n_sampling_runs):
 
         if method in train_ratio_methods:
-            theta_0_spec = training_params['theta_0']
-            theta_1_spec = training_params['theta_1']
+            theta_0_spec = training_params["theta_0"]
+            theta_1_spec = training_params["theta_1"]
             theta_0_vals = get_theta_values(theta_0_spec)
             theta_1_vals = get_theta_values(theta_1_spec)
 
@@ -85,43 +85,45 @@ for method in methods:
                 theta0=theta_0_vals,
                 theta1=theta_1_vals,
                 n_samples=n_samples_train,
-                folder=f'{data_dir}/Samples_{method}_{i}',
-                filename=f'{method}_train',
+                folder=f"{data_dir}/Samples_{method}_{i}",
+                filename=f"{method}_train",
                 test_split=test_split,
             )
 
         elif method in train_local_methods:
-            theta_spec = training_params['theta_0']
+            theta_spec = training_params["theta_0"]
             theta_vals = get_theta_values(theta_spec)
 
             sampler.sample_train_local(
                 theta=theta_vals,
                 n_samples=n_samples_train,
-                folder=f'{data_dir}/Samples_{method}_{i}',
-                filename=f'{method}_train',
+                folder=f"{data_dir}/Samples_{method}_{i}",
+                filename=f"{method}_train",
                 test_split=test_split,
             )
 
         elif method in train_global_methods:
-            theta_spec = training_params['theta_0']
+            theta_spec = training_params["theta_0"]
             theta_vals = get_theta_values(theta_spec)
 
             sampler.sample_train_density(
                 theta=theta_vals,
                 n_samples=n_samples_train,
-                folder=f'{data_dir}/Samples_{method}_{i}',
-                filename=f'{method}_train',
+                folder=f"{data_dir}/Samples_{method}_{i}",
+                filename=f"{method}_train",
                 test_split=test_split,
             )
 
         else:
-            raise ValueError('Invalid sampling method')
+            raise ValueError("Invalid sampling method")
 
 
 #################################
 ## MLFlow tracking information ##
 #################################
 
-mlflow.set_tags({
-    "context": "workflow",
-})
+mlflow.set_tags(
+    {
+        "context": "workflow",
+    }
+)
