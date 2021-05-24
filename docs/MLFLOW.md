@@ -75,7 +75,7 @@ When running the workflow, you can specify the environment variable `MLFLOW_TRAC
 to log the experiment runs information to a MLFlow tracking server previously deployed.
 
 To deploy the MLFlow tracking server locally:
-```shell script
+```shell
 mlflow server --host "0.0.0.0"
 ```
 
@@ -86,7 +86,7 @@ Individual steps can be launched using their shell script. Be aware their execut
 previous step outputs, so a sequential order must be followed.
 
 Example:
-```shell script
+```shell
 export MLFLOW_TRACKING_URI="http://0.0.0.0:5000"
 scripts/1_sampling.sh \
     --project_path . \
@@ -108,7 +108,7 @@ Therefore:
 - Define `host.docker.internal` as tracking server host.
 - Define `--add-host host.docker.internal:host-gateway` as Docker arg. **Linux only**.
 
-```shell script
+```shell
 export MLFLOW_TRACKING_URI="http://0.0.0.0:5000"
 mlflow experiments create --experiment-name "madminer-ml-sample"
 mlflow experiments create --experiment-name "madminer-ml-train"
@@ -125,8 +125,8 @@ make yadage-run
 [mlflow-docs-cli]: https://www.mlflow.org/docs/latest/cli.html
 [mlflow-docs-track]: https://mlflow.org/docs/latest/tracking.html
 [mlproject-docs]: https://www.mlflow.org/docs/latest/projects.html
-[mlproject-file]: MLproject
-[script-sample]: scripts/1_sampling.sh
-[script-train]: scripts/2_training.sh
-[script-eval]: scripts/3_evaluation.sh
+[mlproject-file]: ../MLproject
+[script-sample]: ../scripts/1_sampling.sh
+[script-train]: ../scripts/2_training.sh
+[script-eval]: ../scripts/3_evaluation.sh
 [yadage-repo]: https://github.com/yadage/yadage
