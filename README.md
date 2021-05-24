@@ -57,6 +57,14 @@ of the workflow.
 Follow the [MLFlow guide][mlflow-guide] to review the implications.
 
 
+### Formatting
+All Python files are formatted using [Black][black-web]:
+
+```shell
+make check
+```
+
+
 ## Execution
 When executing the workflow (either fully or some of its parts) it is important to consider that
 each individual step received inputs and generates outputs. Outputs are usually files, which need
@@ -74,7 +82,7 @@ Individual steps can be launched using their shell script. Be aware their execut
 previous step outputs, so a sequential order must be followed.
 
 Example:
-```shell script
+```shell
 scripts/1_sampling.sh \
     --project_path . \
     --data_file data/dummy_data.h5 \
@@ -92,7 +100,7 @@ Yadage depends on having the Docker image used as environment available on Docke
 Docker image for this workflow, jump to the [Docker section](#docker).
 
 Once the Docker image has been pushed:
-```shell script
+```shell
 pip3 install yadage
 make yadage-run
 ```
@@ -100,19 +108,20 @@ make yadage-run
 
 ## Docker
 To build a new Docker image:
-```shell script
+```shell
 make build
 ```
 
 To push a new Docker image, bump up the `VERSION` number and execute:
 
-```shell script
+```shell
 export DOCKERUSER=<your_dockerhub_username>
 export DOCKERPASS=<your_dockerhub_password>
 make push
 ```
 
 
+[black-web]: https://black.readthedocs.io/en/stable/
 [data-folder]: ./data
 [madminer-docs]: https://madminer.readthedocs.io/en/latest/index.html
 [madminer-repo]: https://github.com/diana-hep/madminer
