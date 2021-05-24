@@ -377,10 +377,10 @@ if plotting['all_methods']:
 
 if plotting['all_methods_separate']:
 
-    p_values_expected = 'p_values_expected_'+plotting_method
-    best_fit_expected = 'best_fit_expected_'+plotting_method
-    p_values_expected_kin = 'p_values_expected_'+plotting_method+'_kin'
-    best_fit_expected_kin = 'best_fit_expected_'+plotting_method+'_kin'
+    p_values_expected = f"p_values_expected_{plotting_method}"
+    best_fit_expected = f"best_fit_expected_{plotting_method}"
+    p_values_expected_kin = f"p_values_expected_{plotting_method}_kin"
+    best_fit_expected_kin = f"best_fit_expected_{plotting_method}_kin"
 
     if(('sally' in methods) and ('sallino' not in methods)):
         plot_input = np.array([
