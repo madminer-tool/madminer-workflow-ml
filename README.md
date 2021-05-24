@@ -126,7 +126,7 @@ make push
 [madminer-docs]: https://madminer.readthedocs.io/en/latest/index.html
 [madminer-repo]: https://github.com/diana-hep/madminer
 [madminer-workflow-ph]: https://github.com/scailfin/madminer-workflow-ph
-[mlflow-guide]: MLFLOW.md
+[mlflow-guide]: docs/MLFLOW.md
 [yadage-repo]: https://github.com/yadage/yadage
 [yadage-docs]: https://yadage.readthedocs.io/en/latest/
 [lukas-profile]: https://github.com/lukasheinrich
