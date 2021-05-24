@@ -382,7 +382,7 @@ if plotting['all_methods_separate']:
     p_values_expected_kin = f"p_values_expected_{plotting_method}_kin"
     best_fit_expected_kin = f"best_fit_expected_{plotting_method}_kin"
 
-    if(('sally' in methods) and ('sallino' not in methods)):
+    if('sally' in methods and 'sallino' not in methods):
         plot_input = np.array([
             [variables_to_plot['p_values_expected_rate'], variables_to_plot['best_fit_expected_rate'], "Rate", "black", "solid"],
             [variables_to_plot['p_values_expected_histo'], variables_to_plot['best_fit_expected_histo'], "Histo", "limegreen", "solid"],
@@ -393,7 +393,7 @@ if plotting['all_methods_separate']:
             [variables_to_plot[p_values_expected_kin], variables_to_plot[best_fit_expected_kin], plotting_method.upper()+"-Kin", "red","dashed"],
         ])
 
-    elif(('sally' not in methods) and ('sallino' in methods)):
+    elif('sally' not in methods) and ('sallino' in methods):
         plot_input = np.array([
             [variables_to_plot['p_values_expected_rate'], variables_to_plot['best_fit_expected_rate'], "Rate", "black", "solid"],
             [variables_to_plot['p_values_expected_histo'], variables_to_plot['best_fit_expected_histo'], "Histo", "limegreen", "solid"],
