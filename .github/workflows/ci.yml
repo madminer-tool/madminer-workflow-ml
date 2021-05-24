@@ -10,7 +10,25 @@ on:
 
 jobs:
 
-  check:
+  check-python:
+    needs: []
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Set up GitHub Actions"
+      uses: actions/checkout@v2
+    - name: "Set up Python 3.8"
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: "Install Python dependencies"
+      run: |
+        pip install --no-cache-dir --upgrade pip setuptools wheel
+        pip install --no-cache-dir --requirement requirements-dev.txt
+    - name: "Check code format"
+      run: |
+        make check
+
+  check-shell:
     needs: []
     runs-on: ubuntu-latest
     steps:
@@ -24,7 +42,7 @@ jobs:
         shellcheck --shell=sh $(find "scripts" -type f -name "*.sh")
 
   validate:
-    needs: [check]
+    needs: [check-python, check-shell]
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
