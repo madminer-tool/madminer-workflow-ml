@@ -1,6 +1,5 @@
 #### Base image
-#### Reference: https://github.com/diana-hep/madminer/blob/master/Dockerfile
-FROM madminertool/docker-madminer:latest
+FROM python:3.8-slim
 
 
 #### Install binary dependencies
