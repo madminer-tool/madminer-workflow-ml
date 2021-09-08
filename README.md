@@ -1,5 +1,10 @@
 # Madminer workflow ML
 
+[![CI/CD Status][ci-status-badge]][ci-status-link]
+[![Docker pulls][docker-pulls-badge]][docker-pulls-link]
+[![MIT license][mit-license-badge]][mit-license-link]
+[![Code style][code-style-badge]][code-style-link]
+
 
 ## About
 This repository defines a Machine Learning workflow using the [Madminer package][madminer-repo]
@@ -120,6 +125,15 @@ export DOCKERPASS=<your_dockerhub_password>
 make push
 ```
 
+
+[ci-status-badge]: https://github.com/scailfin/madminer-workflow-ml/actions/workflows/ci.yml/badge.svg?branch=master
+[ci-status-link]: https://github.com/scailfin/madminer-workflow-ml/actions/workflows/ci.yml?query=branch%3Amaster
+[code-style-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
+[code-style-link]: https://github.com/psf/black
+[docker-pulls-badge]: https://img.shields.io/docker/pulls/madminertool/madminer-workflow-ml.svg
+[docker-pulls-link]: https://hub.docker.com/r/madminertool/madminer-workflow-ml
+[mit-license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
+[mit-license-link]: https://github.com/scailfin/madminer-workflow-ml/blob/master/LICENSE
 
 [black-web]: https://black.readthedocs.io/en/stable/
 [data-folder]: ./data
