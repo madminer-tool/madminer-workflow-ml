@@ -87,7 +87,7 @@ fisher_information:
 
 plotting:
   all_methods: True
-  all_methods_pvalue: 'carl'  # Method must be declare above
+  all_methods_pvalue: 'carl'  # Method must be declared above
   all_methods_separate: True
   correlations: True
   correlations_methods: ['carl','rolr']
