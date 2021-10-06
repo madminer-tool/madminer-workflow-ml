@@ -67,4 +67,4 @@ eval mlflow run \
     "${mlflow_parsed_args}" \
     "${project_path}"
 
-tar -czvf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .
+tar -czf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .

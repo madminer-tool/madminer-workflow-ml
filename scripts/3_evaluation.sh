@@ -42,7 +42,7 @@ mkdir -p "${TESTS_ABS_PATH}"
 
 
 # Unzip the models folder contents to identify the model
-tar -xvf "${model_file}" -C "${MODELS_ABS_PATH}"
+tar -xf "${model_file}" -C "${MODELS_ABS_PATH}"
 
 MODEL_NAME=$(find "${MODELS_ABS_PATH}" -type d -mindepth 1 -maxdepth 1 -exec basename {} \;)
 MODEL_DIR="${MODELS_ABS_PATH}/${MODEL_NAME}"
