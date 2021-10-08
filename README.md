@@ -126,20 +126,20 @@ make push
 ```
 
 
-[ci-status-badge]: https://github.com/scailfin/madminer-workflow-ml/actions/workflows/ci.yml/badge.svg?branch=master
-[ci-status-link]: https://github.com/scailfin/madminer-workflow-ml/actions/workflows/ci.yml?query=branch%3Amaster
+[ci-status-badge]: https://github.com/madminer-tool/madminer-workflow-ml/actions/workflows/ci.yml/badge.svg?branch=master
+[ci-status-link]: https://github.com/madminer-tool/madminer-workflow-ml/actions/workflows/ci.yml?query=branch%3Amaster
 [code-style-badge]: https://img.shields.io/badge/code%20style-black-000000.svg
 [code-style-link]: https://github.com/psf/black
 [docker-pulls-badge]: https://img.shields.io/docker/pulls/madminertool/madminer-workflow-ml.svg
 [docker-pulls-link]: https://hub.docker.com/r/madminertool/madminer-workflow-ml
 [mit-license-badge]: https://img.shields.io/badge/License-MIT-blue.svg
-[mit-license-link]: https://github.com/scailfin/madminer-workflow-ml/blob/master/LICENSE
+[mit-license-link]: https://github.com/madminer-tool/madminer-workflow-ml/blob/master/LICENSE
 
 [black-web]: https://black.readthedocs.io/en/stable/
 [data-folder]: ./data
 [madminer-docs]: https://madminer.readthedocs.io/en/latest/index.html
-[madminer-repo]: https://github.com/diana-hep/madminer
-[madminer-workflow-ph]: https://github.com/scailfin/madminer-workflow-ph
+[madminer-repo]: https://github.com/madminer-tool/madminer
+[madminer-workflow-ph]: https://github.com/madminer-tool/madminer-workflow-ph
 [mlflow-guide]: docs/MLFLOW.md
 [yadage-repo]: https://github.com/yadage/yadage
 [yadage-docs]: https://yadage.readthedocs.io/en/latest/
