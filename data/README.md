@@ -17,5 +17,5 @@ as the project was defined on a specific point in time.
 Data generation snapshot: [fe6d2a594edd757fb41fa90a9eca9644c6d4808a][repository-snapshot]
 
 
-[madminer-workflow-ph]: https://github.com/scailfin/madminer-workflow-ph
-[repository-snapshot]: https://github.com/scailfin/madminer-workflow-ph/tree/fe6d2a594edd757fb41fa90a9eca9644c6d4808a
+[madminer-workflow-ph]: https://github.com/madminer-tool/madminer-workflow-ph
+[repository-snapshot]: https://github.com/madminer-tool/madminer-workflow-ph/tree/fe6d2a594edd757fb41fa90a9eca9644c6d4808a
