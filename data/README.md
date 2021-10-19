@@ -14,8 +14,8 @@ make yadage-run
 The sample dataset has been generated running the [Physics workflow][madminer-workflow-ph] locally,
 as the project was defined on a specific point in time.
 
-Data generation snapshot: [fe6d2a594edd757fb41fa90a9eca9644c6d4808a][repository-snapshot]
+Data generation snapshot: [ecd19bebf38fde431cc28e89b29e5e9637a38aeb][repository-snapshot]
 
 
 [madminer-workflow-ph]: https://github.com/madminer-tool/madminer-workflow-ph
-[repository-snapshot]: https://github.com/madminer-tool/madminer-workflow-ph/tree/fe6d2a594edd757fb41fa90a9eca9644c6d4808a
+[repository-snapshot]: https://github.com/madminer-tool/madminer-workflow-ph/tree/ecd19bebf38fde431cc28e89b29e5e9637a38aeb
