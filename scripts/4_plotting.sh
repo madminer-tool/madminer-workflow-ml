@@ -23,7 +23,10 @@ mkdir -p "${output_dir}/plots"
 
 # POSIX shell scripts do not allow arrays (workaround)
 echo "${result_files}" | tr ' ' '\n' | while read -r file; do
+    # Kubernetes at CERN sandwich with set +o errexit
+    set +o errexit
     tar -xf "${file}" -C "${output_dir}";
+    set -o errexit
 done
 
 
