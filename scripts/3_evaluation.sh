@@ -42,7 +42,10 @@ mkdir -p "${TESTS_ABS_PATH}"
 
 
 # Unzip the models folder contents to identify the model
+# Kubernetes at CERN sandwich with set +o errexit
+set +o errexit
 tar -xf "${model_file}" -C "${MODELS_ABS_PATH}"
+set -o errexit
 
 MODEL_NAME=$(find "${MODELS_ABS_PATH}" -type d -mindepth 1 -maxdepth 1 -exec basename {} \;)
 MODEL_DIR="${MODELS_ABS_PATH}/${MODEL_NAME}"
@@ -80,10 +83,13 @@ eval mlflow run \
     --param-list "output_folder=${output_dir}" \
     "${mlflow_parsed_args}" \
     "${project_path}"
-
+    
+# Kubernetes at CERN sandwich with set +o errexit
+set +o errexit
 tar -czf "${output_dir}/Results_${MODEL_NAME}.tar.gz" \
     -C "${output_dir}" \
     "models" \
     "rates" \
     "results" \
     "test"
+set -o errexit

@@ -67,4 +67,7 @@ eval mlflow run \
     "${mlflow_parsed_args}" \
     "${project_path}"
 
+# Kubernetes at CERN sandwich with set +o errexit
+set +o errexit
 tar -czf "${MODEL_FILE_ABS_PATH}" -C "${MODEL_INFO_ABS_PATH}" .
+set -o errexit
