@@ -47,10 +47,10 @@ reana-run:
 	@echo "Deploying on REANA..."
 	@cd $(WORKFLOW_DIR) && \
 		reana-client create -n $(WORKFLOW_NAME) && \
-		reana-client upload -w $(WORKFLOW_NAME) $(WORKFLOW_DIR) && \
-		reana-client upload -w $(WORKFLOW_NAME) $(INPUT_DIR) && \
-		reana-client upload -w $(WORKFLOW_NAME) $(DATA_FILE) && \
-		reana-client start -w $(WORKFLOW_NAME) \
+		reana-client upload -w $(WORKFLOW_NAME) . 
+	@reana-client upload -w $(WORKFLOW_NAME) $(INPUT_DIR) && \
+	 reana-client upload -w $(WORKFLOW_NAME) $(DATA_FILE) && \
+	 reana-client start -w $(WORKFLOW_NAME) \
 			-p mlflow_server=$(MLFLOW_TRACKING_URI) \
 			-p mlflow_username=$(MLFLOW_USERNAME)
 
