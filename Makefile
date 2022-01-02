@@ -43,7 +43,7 @@ reana-check:
 
 
 .PHONY: reana-run
-reana-run: copy
+reana-run: 
 	@echo "Deploying on REANA..."
 	@cd $(WORKFLOW_DIR) && \
 		reana-client create -n $(WORKFLOW_NAME) && \
