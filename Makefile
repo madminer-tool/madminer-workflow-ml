@@ -9,6 +9,13 @@ YADAGE_INPUT_DIR = "$(PWD)/workflow"
 YADAGE_SPEC_DIR = "$(PWD)/workflow/yadage"
 YADAGE_WORK_DIR = "$(PWD)/.yadage"
 
+WORKFLOW_DIR = "$(PWD)/workflow/yadage"
+WORKFLOW_FILE = "workflow.yml"
+WORKFLOW_NAME = "madminer-workflow-ml"
+
+INPUT_DIR="$(PWD)/workflow"
+DATA_FILE="$(PWD)/data/combined_delphes.h5"
+
 
 .PHONY: check
 check:
@@ -27,6 +34,25 @@ push: build
 	@echo "Pushing Docker image..."
 	@docker login --username "${DOCKERUSER}" --password "${DOCKERPASS}"
 	@docker push $(DOCKER_REGISTRY)/$(DOCKER_NAME):$(DOCKER_VERSION)
+
+
+.PHONY: reana-check
+reana-check:
+	@echo "Checking REANA spec..."
+	@cd $(WORKFLOW_DIR) && reana-client validate --environments
+
+
+.PHONY: reana-run
+reana-run: copy
+	@echo "Deploying on REANA..."
+	@cd $(WORKFLOW_DIR) && \
+		reana-client create -n $(WORKFLOW_NAME) && \
+		reana-client upload -w $(WORKFLOW_NAME) $(WORKFLOW_DIR) && \
+		reana-client upload -w $(WORKFLOW_NAME) $(INPUT_DIR) && \
+		reana-client upload -w $(WORKFLOW_NAME) $(DATA_FILE) && \
+		reana-client start -w $(WORKFLOW_NAME) \
+			-p mlflow_server=$(MLFLOW_TRACKING_URI) \
+			-p mlflow_username=$(MLFLOW_USERNAME)
 
 
 .PHONY: yadage-clean
