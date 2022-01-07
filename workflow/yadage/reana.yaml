@@ -3,8 +3,8 @@ inputs:
   parameters:
     data_file: "data/combined_delphes.h5"
     input_file: "workflow/input.yml"
-    mlflow_args_s: "'n_samples_train=10000000'"
-    mlflow_args_t: "'num_epochs=50 alpha=0.1 batch_size=128'"
+    mlflow_args_s: "'n_samples_train=100000000'"
+    mlflow_args_t: "'num_epochs=100 alpha=0.1 batch_size=128'"
     mlflow_args_e: "''"
     mlflow_server: ""
     mlflow_username: ""

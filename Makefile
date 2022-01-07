@@ -65,10 +65,10 @@ yadage-clean:
 yadage-run: yadage-clean
 	@echo "Launching Yadage..."
 	@yadage-run $(YADAGE_WORK_DIR) "workflow.yml" \
-		-p data_file="/madminer/data/dummy_data.h5" \
+		-p data_file="/madminer/data/combined_delphes.h5" \
 		-p input_file="input.yml" \
-		-p mlflow_args_s="\"''\"" \
-		-p mlflow_args_t="\"''\"" \
+		-p mlflow_args_s="\"'n_samples_train=100000'\"" \
+		-p mlflow_args_t="\"'num_epochs=50 alpha=0.1 batch_size=128'\"" \
 		-p mlflow_args_e="\"''\"" \
 		-p mlflow_server=$(MLFLOW_TRACKING_URI) \
 		-p mlflow_username=$(MLFLOW_USERNAME) \
