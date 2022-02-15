@@ -31,28 +31,19 @@ to test individual steps before testing the full workflow coordination.
 
 Considering the workflow steps:
 
-                         +--------------+
-                         |   Sampling   |
-                         +--------------+
-                                |
-            +-------------------+-------------------+
-            |                   |                   |
-            v                   v                   v
-    +--------------+    +--------------+    +--------------+
-    |  Training_0  |    |  Training_1  |    |      ...     |
-    +--------------+    +--------------+    +--------------+
-            |                   |                   |
-            |                   |                   |
-            v                   v                   v
-    +--------------+    +--------------+    +--------------+
-    | Evaluation_0 |    | Evaluation_1 |    |      ...     |
-    +--------------+    +--------------+    +--------------+
-            |                   |                   |
-            +-------------------+-------------------+
-                                v
-                        +--------------+
-                        |     Plot     |
-                        +--------------+
+```mermaid
+flowchart TD
+    init[Init] --> sampling[Sampling]
+    sampling --> train_0[Training 0]
+    sampling --> train_1[Training 1]
+    sampling --> train_n[Training ...]
+    train_0 --> eval_0[Evaluation 0]
+    train_1 --> eval_1[Evaluation 1]
+    train_n --> eval_n[Evaluation ...]
+    eval_0 --> plot[Plot]
+    eval_1 --> plot[Plot]
+    eval_n --> plot[Plot]
+```
 
 
 ## MLFlow
