@@ -89,6 +89,6 @@ plotting:
   all_methods: True
   all_methods_pvalue: 'alices'  # Method must be declared above
   all_methods_separate: True
-  correlations: True
+  correlations: False # Throws exception on wrapper
   correlations_methods: ['alices','alice']
   rates: True
