@@ -5,7 +5,7 @@ set -o errexit
 set -o nounset
 
 
-# shellcheck disable=SC1090
+# shellcheck disable=SC1091
 . "$(dirname "$0")/mlflow_funcs.sh"
 
 
@@ -47,7 +47,7 @@ if [ -n "${MLFLOW_TRACKING_URI:-}" ]; then
     uri="${MLFLOW_TRACKING_URI}"
     uri=$(sanitize_tracking_uri "${uri}" "${output_dir}")
 
-    export MLFLOW_TRACKING_URI=${uri}
+    export MLFLOW_TRACKING_URI="${uri}"
 fi
 
 
